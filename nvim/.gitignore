@@ -1,5 +1,5 @@
 *vendor
-*plugin
+plugin/packer_compiled.lua
 composer.lock
 composer.json
 .DS_Store

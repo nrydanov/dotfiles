@@ -20,9 +20,11 @@ return require('packer').startup(function(use)
         run = 'fzf#install()'
     }
     use 'junegunn/fzf.vim'
-    -- LSP and completion
+    -- LSP and completion (probably, smth is redundant here)
     use 'neovim/nvim-lspconfig'
     use 'hrsh7th/nvim-cmp'
+    use 'hrsh7th/cmp-nvim-lsp'
+    use 'mfussenegger/nvim-lsp-compl'
     -- LSP: Snippets
     use 'L3MON4D3/LuaSnip'
     use 'saadparwaiz1/cmp_luasnip'
