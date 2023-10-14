@@ -3,21 +3,21 @@
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 
-USERNAME="find.art.in.living"
 # Paths
 
+$HOMEBREW = '/opt/homebrew/opt/'
+
 export PATH=/usr/local/smlnj/bin:"$PATH"
-export PATH="/opt/homebrew/opt/bison/bin:$PATH"
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-export PATH="/opt/pypy3.9/bin:$PATH"
+export PATH="$HOMEBREW/bison/bin:$PATH"
+export PATH="$HOMEBREW/llvm/bin:$PATH"
+export PATH="$HOMEBREW/ruby/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin/miktex-dist:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export TMPDIR=/tmp
 # Vim
 alias vim=nvim
-set rtp+=/opt/homebrew/opt/fzf
+set rtp+= $HOMEBREW/fzf
 
 # Sync vim colorscheme with terminal. 
 # Note: TermcolorsShow plugin is required for this to work
