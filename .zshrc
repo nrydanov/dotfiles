@@ -11,9 +11,9 @@ export PATH="/opt/homebrew/opt/bison/bin:$PATH"
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 export PATH="/opt/pypy3.9/bin:$PATH"
-export PATH="/Users/$USERNAME/bin:$PATH"
-export PATH="/Users/$USERNAME/.local/bin/miktex-dist:$PATH"
-export PATH="/Users/$USERNAME/.cargo/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin/miktex-dist:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 export TMPDIR=/tmp
 # Vim
 alias vim=nvim
@@ -63,5 +63,4 @@ zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 # Prompt format string
 setopt PROMPT_SUBST
 PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@macbook %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 export BAT_THEME="TwoDark"
