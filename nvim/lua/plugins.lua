@@ -54,6 +54,7 @@ return require('packer').startup(function(use)
     use 'nrydanov/one-nvim'
     use 'tjdevries/colorbuddy.vim'
 
+
     if packer then
         require('packer').sync()
     end

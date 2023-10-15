@@ -8,7 +8,7 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
     properties = { "documentation", "detail", "additionalTextEdits" },
 }
 
-local servers = { "clangd", "gopls", "pylsp", "lua_ls", 'intelephense' }
+local servers = { "clangd", "gopls", "pylsp", 'intelephense' }
 
 for _, server in ipairs(servers) do
     lsp[server].setup({ capabilities = capabilities })

@@ -1,6 +1,8 @@
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', 'E', "$", {remap = true})
+vim.keymap.set('n', 'S', "0", {remap = true})
 
 vim.api.nvim_set_keymap('n', '<space>o', ':Files<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<space>l', ':Ag<CR>', {noremap = true, silent = true})
