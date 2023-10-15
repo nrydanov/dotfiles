@@ -17,5 +17,6 @@ vim.opt.mat = 2
 vim.opt.pumheight = 5
 vim.opt.syntax = "on"
 vim.opt.background = "dark"
+vim.opt.clipboard = "unnamedplus"
 
 vim.cmd('autocmd VimLeave * set guicursor=a:ver25-blinkon10')

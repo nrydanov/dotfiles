@@ -10,8 +10,14 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 
 local servers = { "clangd", "gopls", "pylsp", 'intelephense' }
 
+local settings = {
+    pylsp = {
+        {}
+    }
+}
+
 for _, server in ipairs(servers) do
-    lsp[server].setup({ capabilities = capabilities })
+    lsp[server].setup({ capabilities = capabilities, settings = settings[server] })
 end
 
 local cmp = require "cmp"
