@@ -5,16 +5,19 @@ bindkey '^[[B' down-line-or-search
 
 # Paths
 
-$HOMEBREW = '/opt/homebrew/opt/'
+HOMEBREW="/opt/homebrew/opt/"
 
-export PATH=/usr/local/smlnj/bin:"$PATH"
+export PATH="/usr/local/smlnj/bin:$PATH"
 export PATH="$HOMEBREW/bison/bin:$PATH"
 export PATH="$HOMEBREW/llvm/bin:$PATH"
 export PATH="$HOMEBREW/ruby/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin/miktex-dist:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export TMPDIR=/tmp
+export MODULAR_HOME="$HOME/.modular"
+
 # Vim
 alias vim=nvim
 set rtp+= $HOMEBREW/fzf

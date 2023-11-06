@@ -8,16 +8,42 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
     properties = { "documentation", "detail", "additionalTextEdits" },
 }
 
-local servers = { "clangd", "gopls", "pylsp", 'intelephense' }
+local servers = { "clangd", "gopls", "pylsp", 'intelephense', 'rust_analyzer'}
 
 local settings = {
     pylsp = {
-        {}
+        plugins = {
+            ruff = {
+                enabled = true,
+                extendSelect = {"I"}
+            },
+            flake8 = {
+                enabled = false
+            },
+            pycodestyle = {
+                enabled = false
+            },
+            mccabe = {
+                enabled = false
+            },
+            pyflakes = {
+                enabled = false
+            },
+            autopep8 = {
+                enabled = false
+            },
+            pylint = {
+                enabled = false
+            },
+            rope_completion = {
+                enabled = true
+            },
+        },
     }
 }
 
 for _, server in ipairs(servers) do
-    lsp[server].setup({ capabilities = capabilities, settings = settings[server] })
+    lsp[server].setup({ capabilities = capabilities, settings = settings })
 end
 
 local cmp = require "cmp"
