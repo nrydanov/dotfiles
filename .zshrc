@@ -19,7 +19,8 @@ export TMPDIR=/tmp
 export MODULAR_HOME="$HOME/.modular"
 
 # Vim
-alias vim=nvim
+#alias vim=nvim
+alias rm=trash
 set rtp+= $HOMEBREW/fzf
 
 # Sync vim colorscheme with terminal. 

@@ -14,20 +14,24 @@ local packer = ensure_packer()
 return require('packer').startup(function(use)
     -- Vim Package Manager
     use 'wbthomason/packer.nvim'
-    -- Fuzzy file and line searcher
+    use 'neovim/nvim-lspconfig'
+    -- Fuzzy file and line searchers
     use {
         'junegunn/fzf',
-        run = 'fzf#install()'
+        'junegunn/fzf.vim'
     }
-    use 'junegunn/fzf.vim'
-    -- LSP and completion (probably, smth is redundant here)
-    use 'neovim/nvim-lspconfig'
-    use 'hrsh7th/nvim-cmp'
-    use 'hrsh7th/cmp-nvim-lsp'
-    use 'mfussenegger/nvim-lsp-compl'
+    use {
+        'hrsh7th/nvim-cmp',
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-buffer',
+        'hrsh7th/cmp-path',
+        'hrsh7th/cmp-cmdline'
+    }
     -- LSP: Snippets
-    use 'L3MON4D3/LuaSnip'
-    use 'saadparwaiz1/cmp_luasnip'
+    use {
+        'L3MON4D3/LuaSnip',
+        'saadparwaiz1/cmp_luasnip',
+    }
     -- LSP signature pop-up
     use 'ray-x/lsp_signature.nvim'
     -- Syntax highlighting
@@ -41,18 +45,24 @@ return require('packer').startup(function(use)
     use 'psliwka/termcolors.nvim'
     -- Status line
     use {
-       'nvim-lualine/lualine.nvim',
-       requires='nvim-tree/nvim-web-devicons'
+        'nvim-lualine/lualine.nvim',
+        requires = 'nvim-tree/nvim-web-devicons'
     }
     -- Git integration
     use 'lewis6991/gitsigns.nvim'
     -- Commenting
-    use 'tpope/vim-commentary'
+    -- use 'tpope/vim-commentary'
     -- File explorer
     use 'nvim-tree/nvim-tree.lua'
     -- Colorscheme
     use 'nrydanov/one-nvim'
     use 'tjdevries/colorbuddy.vim'
+    use 'lukas-reineke/indent-blankline.nvim'
+    use {
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+    }
+    use "kaarmu/typst.vim"
 
 
     if packer then

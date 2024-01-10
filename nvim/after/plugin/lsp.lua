@@ -8,37 +8,30 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
     properties = { "documentation", "detail", "additionalTextEdits" },
 }
 
-local servers = { "clangd", "gopls", "pylsp", 'intelephense', 'rust_analyzer'}
+local servers = {
+    "clangd",
+    "gopls",
+    "pylsp",
+    "intelephense",
+    "rust_analyzer",
+    "lua_ls",
+    "typst_lsp"
+}
 
 local settings = {
     pylsp = {
         plugins = {
             ruff = {
                 enabled = true,
-                extendSelect = {"I"}
-            },
-            flake8 = {
-                enabled = false
-            },
-            pycodestyle = {
-                enabled = false
-            },
-            mccabe = {
-                enabled = false
-            },
-            pyflakes = {
-                enabled = false
-            },
-            autopep8 = {
-                enabled = false
-            },
-            pylint = {
-                enabled = false
-            },
-            rope_completion = {
-                enabled = true
+                extendSelect = { "I", "E", "F" },
+                format = { "I" },
+                unsafeFixes = false
             },
         },
+    },
+    typst_lsp = {
+        exportPdf = "onType",
+        serverPath = ""
     }
 }
 
