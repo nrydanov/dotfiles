@@ -15,7 +15,7 @@ local servers = {
     "intelephense",
     "rust_analyzer",
     "lua_ls",
-    "typst_lsp"
+    "typst_lsp",
 }
 
 local settings = {
