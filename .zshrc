@@ -14,15 +14,8 @@ bindkey '^[[B' down-line-or-search
 
 # Paths
 
-HOMEBREW="/opt/homebrew/opt/"
-
-export PATH="/usr/local/smlnj/bin:$PATH"
-export PATH="$HOMEBREW/bison/bin:$PATH"
-export PATH="$HOMEBREW/llvm/bin:$PATH"
-export PATH="$HOMEBREW/ruby/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/.local/bin/miktex-dist:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export MODULAR_HOME="$HOME/.modular"
 export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export TMPDIR=/tmp
 export MODULAR_HOME="$HOME/.modular"
@@ -36,6 +29,7 @@ alias s="kitten ssh"
 ## Kubernetes
 alias k="kubectl"
 set rtp+= $HOMEBREW/fzf
+set rtp+=/opt/homebrew/opt/fzf
 
 # Sync vim colorscheme with terminal. 
 # Note: TermcolorsShow plugin is required for this to work
@@ -46,18 +40,14 @@ if [ ! -f $COLORS_FILE ]; then
     cat $COLORS_FILE >> ~/.config/kitty/kitty.conf
 fi
 
-USER_COLOR=color3
+USER_COLOR=color1
 USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 VCS_COLOR=color4
 VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
-HOST_COLOR=color3
+HOST_COLOR=color1
 HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 BACKGROUND_COLOR=inactive_tab_background
 BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-
-
-# Changing iTerm2 background with special escape sequence
-echo -e "\033]Ph$BACKGROUND_COLOR_CODE\033\\"
 
 # Homebrew
 export HOMEBREW_NO_AUTO_UPDATE=1
@@ -82,6 +72,6 @@ zstyle ':completion:*' menu select
 zstyle ':autocomplete:*complete*:*' insert-unambiguous yes 
 # Prompt format string
 setopt PROMPT_SUBST
-PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@macbook %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
-
 export GPG_TTY=$(tty)
+PROMPT=$'%F{#$USER_COLOR_CODE}no.art.in.living%f%F{#$HOST_COLOR_CODE}@ubuntu %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
+source "$HOME/.rye/env" 
