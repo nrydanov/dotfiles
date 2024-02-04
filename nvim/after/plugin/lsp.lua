@@ -14,7 +14,6 @@ local servers = {
     "pylsp",
     "intelephense",
     "rust_analyzer",
-    "lua_ls",
     "typst_lsp",
 }
 

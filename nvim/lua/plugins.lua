@@ -53,8 +53,11 @@ return require('packer').startup(function(use)
     -- Commenting
     use 'tpope/vim-commentary'
     -- File explorer
-    use 'nvim-tree/nvim-tree.lua'
-    -- Colorscheme
+    use {
+        "nvim-tree/nvim-tree.lua",
+        after = "nvim-web-devicons",
+        requires = "nvim-tree/nvim-web-devicons",
+    }    -- Colorscheme
     use 'nrydanov/one-nvim'
     use 'Mofiqul/vscode.nvim'
     use 'tjdevries/colorbuddy.vim'
