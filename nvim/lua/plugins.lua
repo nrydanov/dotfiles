@@ -16,10 +16,10 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
     use 'neovim/nvim-lspconfig'
     -- Fuzzy file and line searchers
-    use {
-        'junegunn/fzf',
-        'junegunn/fzf.vim'
-    }
+   -- use {
+    --     'junegunn/fzf',
+    --     'junegunn/fzf.vim'
+    -- }
     use {
         'hrsh7th/nvim-cmp',
         'hrsh7th/cmp-nvim-lsp',
@@ -56,6 +56,7 @@ return require('packer').startup(function(use)
     use 'nvim-tree/nvim-tree.lua'
     -- Colorscheme
     use 'nrydanov/one-nvim'
+    use 'Mofiqul/vscode.nvim'
     use 'tjdevries/colorbuddy.vim'
     use 'lukas-reineke/indent-blankline.nvim'
     use {
@@ -63,7 +64,11 @@ return require('packer').startup(function(use)
         "williamboman/mason-lspconfig.nvim",
     }
     use "kaarmu/typst.vim"
-
+    use {
+      'nvim-telescope/telescope.nvim', tag = '0.1.5',
+    -- or                            , branch = '0.1.x',
+      requires = { {'nvim-lua/plenary.nvim'} }
+    }
 
     if packer then
         require('packer').sync()

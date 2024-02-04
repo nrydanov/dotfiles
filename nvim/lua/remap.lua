@@ -4,8 +4,8 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', 'E', "$", {remap = true})
 vim.keymap.set('n', 'S', "0", {remap = true})
 
-vim.api.nvim_set_keymap('n', '<space>o', ':Files<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<space>l', ':Ag<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<space>o', ':Telescope find_files<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>l', ':Telescope live_grep<CR>', {noremap = true, silent = true})
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
     callback = function(ev)
