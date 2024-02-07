@@ -40,11 +40,11 @@ if [ ! -f $COLORS_FILE ]; then
     cat $COLORS_FILE >> ~/.config/kitty/kitty.conf
 fi
 
-USER_COLOR=color1
+USER_COLOR=color2
 USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 VCS_COLOR=color4
 VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
-HOST_COLOR=color1
+HOST_COLOR=color2
 HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 BACKGROUND_COLOR=inactive_tab_background
 BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
