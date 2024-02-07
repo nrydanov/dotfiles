@@ -14,18 +14,41 @@ local packer = ensure_packer()
 return require('packer').startup(function(use)
     -- Vim Package Manager
     use 'wbthomason/packer.nvim'
-    use 'neovim/nvim-lspconfig'
-    -- Fuzzy file and line searchers
-   -- use {
-    --     'junegunn/fzf',
-    --     'junegunn/fzf.vim'
-    -- }
+    -- LSP Package Manager
+    use {
+        {
+            "williamboman/mason.nvim",
+            opts = {
+                ensure_installed = {
+                    "mypy",
+                    "ruff",
+                    "pyright"
+                }
+            }
+        },
+        "williamboman/mason-lspconfig.nvim",
+    }
+    -- Native LSP configuration
+    use {
+        'neovim/nvim-lspconfig',
+    }
+    -- Completion
     use {
         'hrsh7th/nvim-cmp',
         'hrsh7th/cmp-nvim-lsp',
         'hrsh7th/cmp-buffer',
         'hrsh7th/cmp-path',
         'hrsh7th/cmp-cmdline'
+    }
+    -- Fuzzy search
+    use {
+        'nvim-telescope/telescope.nvim', tag = '0.1.5',
+        -- or                            , branch = '0.1.x',
+        requires = { { 'nvim-lua/plenary.nvim' } }
+    }
+    -- Non-LSP actions and more 
+    use {
+        'nvimtools/none-ls.nvim',
     }
     -- LSP: Snippets
     use {
@@ -57,22 +80,18 @@ return require('packer').startup(function(use)
         "nvim-tree/nvim-tree.lua",
         after = "nvim-web-devicons",
         requires = "nvim-tree/nvim-web-devicons",
-    }    -- Colorscheme
+    } -- Colorscheme
     use 'nrydanov/one-nvim'
     use 'Mofiqul/vscode.nvim'
     use 'tjdevries/colorbuddy.vim'
+    -- Misc
     use 'lukas-reineke/indent-blankline.nvim'
-    use {
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
-    }
     use "kaarmu/typst.vim"
     use {
-      'nvim-telescope/telescope.nvim', tag = '0.1.5',
-    -- or                            , branch = '0.1.x',
-      requires = { {'nvim-lua/plenary.nvim'} }
+        'HallerPatrick/py_lsp.nvim',
+        -- Support for versioning
+        -- tag = "v0.0.1" 
     }
-
     if packer then
         require('packer').sync()
     end
