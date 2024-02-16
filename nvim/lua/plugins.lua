@@ -46,7 +46,7 @@ return require('packer').startup(function(use)
         -- or                            , branch = '0.1.x',
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
-    -- Non-LSP actions and more 
+    -- Non-LSP actions and more
     use {
         'nvimtools/none-ls.nvim',
     }
@@ -90,7 +90,10 @@ return require('packer').startup(function(use)
     use {
         'HallerPatrick/py_lsp.nvim',
         -- Support for versioning
-        -- tag = "v0.0.1" 
+        -- tag = "v0.0.1"
+    }
+    use {
+        'NoahTheDuke/vim-just'
     }
     if packer then
         require('packer').sync()
