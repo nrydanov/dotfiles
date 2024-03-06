@@ -10,7 +10,7 @@ local servers = {
     "intelephense",
     "rust_analyzer",
     "typst_lsp",
-    "lua_ls",
+    "lua_ls"
 }
 
 local settings = {
@@ -28,9 +28,15 @@ local settings = {
             },
         },
     },
-    pyright = {
-        autoImportCompletion = true,
+    typst_lsp = {
+        exportPdf = "onType",
+        serverPath = ""
     },
+    Lua = {
+        diagnostics = {
+            globals = { 'vim', 'require' }
+        }
+    }
 }
 
 for _, server in ipairs(servers) do

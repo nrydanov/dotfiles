@@ -1,3 +1,2 @@
 require('telescope').setup{
-
 }

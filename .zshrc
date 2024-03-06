@@ -17,10 +17,11 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export TMPDIR=/tmp
 export MODULAR_HOME="$HOME/.modular"
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-14.jdk/Contents/Home
 
 # Vim
-#alias vim=nvim
-alias rm=trash
+alias vim=nvim
+# alias rm=trash
 set rtp+= $HOMEBREW/fzf
 
 # Sync vim colorscheme with terminal. 
@@ -67,4 +68,3 @@ zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 # Prompt format string
 setopt PROMPT_SUBST
 PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@macbook %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
-export BAT_THEME="TwoDark"

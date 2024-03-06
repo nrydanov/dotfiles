@@ -93,7 +93,17 @@ return require('packer').startup(function(use)
         -- tag = "v0.0.1"
     }
     use {
-        'NoahTheDuke/vim-just'
+        'NoahTheDuke/vim-just',
+        'nvim-telescope/telescope.nvim', tag = '0.1.5',
+        -- or                            , branch = '0.1.x',
+        requires = { { 'nvim-lua/plenary.nvim' } }
+    }
+    use {
+        "scalameta/nvim-metals",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "mfussenegger/nvim-dap",
+        }
     }
     if packer then
         require('packer').sync()
