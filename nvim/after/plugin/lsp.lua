@@ -29,10 +29,6 @@ local settings = {
             },
         },
     },
-    typst_lsp = {
-        exportPdf = "onType",
-        serverPath = ""
-    },
     Lua = {
         diagnostics = {
             globals = { 'vim', 'require' }

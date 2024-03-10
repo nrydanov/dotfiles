@@ -30,6 +30,7 @@ COLORS_FILE=~/.config/.nvimcolors
 
 if [ ! -f $COLORS_FILE ]; then
     nvim -c "TermcolorsShow" -c ":w! $COLORS_FILE" -c "q"
+    cat $COLORS_FILE >> ~/.config/kitty/kitty.conf
 fi
 
 USER_COLOR=color3
