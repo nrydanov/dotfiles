@@ -80,10 +80,15 @@ return require('packer').startup(function(use)
         "nvim-tree/nvim-tree.lua",
         after = "nvim-web-devicons",
         requires = "nvim-tree/nvim-web-devicons",
-    } -- Colorscheme
+    }
+    -- Colorscheme
     use 'nrydanov/one-nvim'
     use 'Mofiqul/vscode.nvim'
     use 'tjdevries/colorbuddy.vim'
+    use {
+        'sonph/onehalf',
+        rtp = "vim"
+    }
     -- Misc
     use 'lukas-reineke/indent-blankline.nvim'
     use "kaarmu/typst.vim"
@@ -91,12 +96,6 @@ return require('packer').startup(function(use)
         'HallerPatrick/py_lsp.nvim',
         -- Support for versioning
         -- tag = "v0.0.1"
-    }
-    use {
-        'NoahTheDuke/vim-just',
-        'nvim-telescope/telescope.nvim', tag = '0.1.5',
-        -- or                            , branch = '0.1.x',
-        requires = { { 'nvim-lua/plenary.nvim' } }
     }
     use {
         "scalameta/nvim-metals",

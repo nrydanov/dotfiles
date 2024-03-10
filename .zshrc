@@ -61,10 +61,12 @@ add-zsh-hook precmd precmd
 
 autoload compinit && compinit
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
-source ~/.config/zsh/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 zstyle ':completion:*' menu select
 zstyle ':autocomplete:*complete*:*' insert-unambiguous yes 
 # Prompt format string
 setopt PROMPT_SUBST
 PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@macbook %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
+
+export GPG_TTY=$(tty)
