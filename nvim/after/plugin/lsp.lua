@@ -11,7 +11,7 @@ local servers = {
     "rust_analyzer",
     "typst_lsp",
     "lua_ls",
-    "ruff_lsp"
+    -- "ruff_lsp"
 }
 
 local settings = {
@@ -27,6 +27,9 @@ local settings = {
                 format = { "I" },
                 unsafeFixes = false
             },
+            rope_autoimport = {
+                enabled = true,
+            },
         },
     },
     Lua = {
@@ -39,3 +42,7 @@ local settings = {
 for _, server in ipairs(servers) do
     lsp[server].setup({ settings = settings })
 end
+
+lsp.pylsp.setup {
+    settings = settings,
+}

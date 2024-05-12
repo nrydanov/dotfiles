@@ -14,6 +14,7 @@ local packer = ensure_packer()
 return require('packer').startup(function(use)
     -- Vim Package Manager
     use 'wbthomason/packer.nvim'
+    -- use 'numirias/semshi' -- :UpdateRemotePlugins
     -- LSP Package Manager
     use {
         {
@@ -92,11 +93,12 @@ return require('packer').startup(function(use)
     -- Misc
     use 'lukas-reineke/indent-blankline.nvim'
     use "kaarmu/typst.vim"
-    use {
-        'HallerPatrick/py_lsp.nvim',
-        -- Support for versioning
-        -- tag = "v0.0.1"
-    }
+    use "linux-cultist/venv-selector.nvim"
+    -- use {
+    --     'HallerPatrick/py_lsp.nvim',
+    --     -- Support for versioning
+    --     -- tag = "v0.0.1"
+    -- }
     use {
         "scalameta/nvim-metals",
         requires = {

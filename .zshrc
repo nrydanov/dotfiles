@@ -1,4 +1,13 @@
 # Bindings
+if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
+    alias ls='ls --color=auto'
+    alias gcc='gcc -fdiagnostics-color=always'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+    alias cargo='cargo --color=always'
+    alias cargo-clippy='cargo-clippy --color=always'
+fi
 
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
@@ -17,8 +26,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export TMPDIR=/tmp
 export MODULAR_HOME="$HOME/.modular"
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-14.jdk/Contents/Home
-
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home
 # Vim
 alias vim=nvim
 # alias rm=trash
@@ -48,7 +56,6 @@ echo -e "\033]Ph$BACKGROUND_COLOR_CODE\033\\"
 
 # Homebrew
 export HOMEBREW_NO_AUTO_UPDATE=1
-export NO_COLOR=1
 # VCS display
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
@@ -63,6 +70,7 @@ add-zsh-hook precmd precmd
 autoload compinit && compinit
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source "$HOME/.rye/env"
 
 zstyle ':completion:*' menu select
 zstyle ':autocomplete:*complete*:*' insert-unambiguous yes 
