@@ -25,8 +25,6 @@ alias vim=nvim
 # Kitty SSH
 alias s="kitten ssh"
 # alias rm=trash
-set rtp+= $HOMEBREW/fzf
-set rtp+=/opt/homebrew/opt/fzf
 
 # Sync vim colorscheme with terminal. 
 # Note: TermcolorsShow plugin is required for this to work
@@ -46,8 +44,6 @@ HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 BACKGROUND_COLOR=inactive_tab_background
 BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 
-# Homebrew
-export HOMEBREW_NO_AUTO_UPDATE=1
 # VCS display
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
@@ -61,7 +57,6 @@ add-zsh-hook precmd precmd
 
 autoload compinit && compinit
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source "$HOME/.rye/env"
 
 zstyle ':completion:*' menu select
