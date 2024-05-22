@@ -11,7 +11,7 @@ local servers = {
     "rust_analyzer",
     "typst_lsp",
     "lua_ls",
-    -- "ruff_lsp"
+    "ruff_lsp"
 }
 
 local settings = {
@@ -36,13 +36,28 @@ local settings = {
         diagnostics = {
             globals = { 'vim', 'require' }
         }
-    }
+    },
 }
 
 for _, server in ipairs(servers) do
     lsp[server].setup({ settings = settings })
 end
 
-lsp.pylsp.setup {
-    settings = settings,
+
+require('lspconfig').rust_analyzer.setup {
+  -- Other Configs ...
+  settings = {
+    ["rust-analyzer"] = {
+      -- Other Settings ...
+      procMacro = {
+        ignored = {
+            leptos_macro = {
+                -- optional: --
+                -- "component",
+                "server",
+            },
+        },
+      },
+    },
+  }
 }

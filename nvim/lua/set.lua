@@ -18,4 +18,7 @@ vim.opt.pumheight = 5
 vim.opt.syntax = "on"
 vim.opt.background = "dark"
 vim.opt.clipboard = "unnamedplus"
+vim.opt.relativenumber = true
 vim.cmd('autocmd VimLeave * set guicursor=a:ver25-blinkon10')
+vim.cmd('autocmd InsertEnter * :set norelativenumber')
+vim.cmd('autocmd InsertLeave * :set relativenumber')
