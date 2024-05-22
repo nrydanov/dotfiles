@@ -30,6 +30,8 @@ alias s="kitten ssh"
 alias k="kubectl"
 set rtp+= $HOMEBREW/fzf
 set rtp+=/opt/homebrew/opt/fzf
+=======
+# alias rm=trash
 
 # Sync vim colorscheme with terminal. 
 # Note: TermcolorsShow plugin is required for this to work
@@ -49,8 +51,6 @@ HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 BACKGROUND_COLOR=inactive_tab_background
 BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 
-# Homebrew
-export HOMEBREW_NO_AUTO_UPDATE=1
 # VCS display
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
