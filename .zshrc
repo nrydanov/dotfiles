@@ -29,6 +29,8 @@ export MODULAR_HOME="$HOME/.modular"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home
 # Vim
 alias vim=nvim
+# Kitty SSH
+alias s="kitten ssh"
 # alias rm=trash
 set rtp+= $HOMEBREW/fzf
 
