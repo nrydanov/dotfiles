@@ -6,7 +6,6 @@ vim.cmd([[
 ]])
 
 local keymap = vim.keymap -- for conciseness
-keymap.set("n", "<space>e", ":NvimTreeToggle<CR>") -- toggle file explorer
 
 -- vim.opt.foldmethod = "expr"
 -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"

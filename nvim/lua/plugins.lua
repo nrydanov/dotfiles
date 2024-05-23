@@ -106,6 +106,7 @@ return require('packer').startup(function(use)
             "mfussenegger/nvim-dap",
         }
     }
+    use "j-hui/fidget.nvim"
     if packer then
         require('packer').sync()
     end

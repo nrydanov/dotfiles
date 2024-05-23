@@ -1,3 +1,5 @@
+
+vim.keymap.set("n", "<space>d", ":NvimTreeToggle<CR>") -- toggle file explorer
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)

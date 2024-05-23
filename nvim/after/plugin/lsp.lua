@@ -45,19 +45,25 @@ end
 
 
 require('lspconfig').rust_analyzer.setup {
-  -- Other Configs ...
-  settings = {
-    ["rust-analyzer"] = {
-      -- Other Settings ...
-      procMacro = {
-        ignored = {
-            leptos_macro = {
-                -- optional: --
-                -- "component",
-                "server",
+    -- Other Configs ...
+    settings = {
+        ["rust-analyzer"] = {
+            rustfmt = {
+                overrideCommand = { 'leptosfmt', '--stdin', '--rustfmt' }
+            },
+            -- Other Settings ...
+            checkOnSave = {
+                    command = "clippy",
+                },
+            procMacro = {
+                ignored = {
+                    leptos_macro = {
+                        -- optional: --
+                        -- "component",
+                        "server",
+                    },
+                },
             },
         },
-      },
-    },
-  }
+    }
 }
