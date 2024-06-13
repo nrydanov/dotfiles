@@ -11,7 +11,8 @@ local servers = {
     "rust_analyzer",
     "typst_lsp",
     "lua_ls",
-    "ruff_lsp"
+    "ruff_lsp",
+    "texlab"
 }
 
 local settings = {
@@ -51,7 +52,9 @@ require('lspconfig').rust_analyzer.setup {
             rustfmt = {
                 overrideCommand = { 'leptosfmt', '--stdin', '--rustfmt' }
             },
-            -- Other Settings ...
+            cargo = {
+                features = "all"
+            },
             checkOnSave = {
                     command = "clippy",
                 },

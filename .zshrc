@@ -26,7 +26,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export TMPDIR=/tmp
 export MODULAR_HOME="$HOME/.modular"
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
 # Vim
 alias vim=nvim
 # Kitty SSH
