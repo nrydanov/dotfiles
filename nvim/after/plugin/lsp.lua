@@ -56,8 +56,8 @@ require('lspconfig').rust_analyzer.setup {
                 features = "all"
             },
             checkOnSave = {
-                    command = "clippy",
-                },
+                command = "clippy",
+            },
             procMacro = {
                 ignored = {
                     leptos_macro = {

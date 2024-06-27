@@ -94,11 +94,6 @@ return require('packer').startup(function(use)
     use 'lukas-reineke/indent-blankline.nvim'
     use "kaarmu/typst.vim"
     use "linux-cultist/venv-selector.nvim"
-    -- use {
-    --     'HallerPatrick/py_lsp.nvim',
-    --     -- Support for versioning
-    --     -- tag = "v0.0.1"
-    -- }
     use {
         "scalameta/nvim-metals",
         requires = {

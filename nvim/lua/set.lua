@@ -22,8 +22,3 @@ vim.opt.relativenumber = true
 vim.cmd('autocmd VimLeave * set guicursor=a:ver25-blinkon10')
 vim.cmd('autocmd InsertEnter * :set norelativenumber')
 vim.cmd('autocmd InsertLeave * :set relativenumber')
-
-
--- local o = vim.opt
--- o.spelllang = { 'ru', 'en' }
--- o.spell = true
