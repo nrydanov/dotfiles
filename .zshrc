@@ -27,11 +27,14 @@ export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export TMPDIR=/tmp
 export MODULAR_HOME="$HOME/.modular"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
-# Vim
+
+# Aliases
+## Vim
 alias vim=nvim
-# Kitty SSH
+## Kitty SSH
 alias s="kitten ssh"
-# alias rm=trash
+## Kubernetes
+alias k="kubectl"
 set rtp+= $HOMEBREW/fzf
 
 # Sync vim colorscheme with terminal. 
@@ -71,6 +74,7 @@ add-zsh-hook precmd precmd
 
 autoload compinit && compinit
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+source <(kubectl completion zsh)
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source "$HOME/.rye/env"
 

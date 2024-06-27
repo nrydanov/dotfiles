@@ -27,7 +27,7 @@ vim.api.nvim_set_keymap('n', 'gr', ':Telescope lsp_references<CR>',
         silent = true
     })
 
-vim.api.nvim_set_keymap('n', '<space>e', ':Telescope diagnostics<CR>',
+vim.api.nvim_set_keymap('n', '<space>t', ':Telescope diagnostics<CR>',
     {
         silent = true
     })
