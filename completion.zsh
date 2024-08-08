@@ -7,7 +7,6 @@ zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-# zstyle ':autocomplete:*' default-context history-incremental-search-backward
 
 bindkey              '^I' menu-select
 bindkey "$terminfo[kcbt]" menu-select

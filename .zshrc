@@ -17,6 +17,8 @@ if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
     alias cargo-clippy='cargo-clippy --color=always'
 fi
 
+set rtp+= $HOMEBREW/fzf
+
 # Soeviy terminal
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
@@ -29,8 +31,6 @@ alias s="kitten ssh"
 ## Kubernetes
 alias k="kubectl"
 
-set rtp+= $HOMEBREW/fzf
-
 # Sync vim colorscheme with terminal.
 # Note: TermcolorsShow plugin is required for this to work
 
@@ -39,14 +39,26 @@ if [ ! -f $COLORS_FILE ]; then
     cat $COLORS_FILE >> ~/.config/kitty/kitty.conf
 fi
 
-USER_COLOR=color3
-USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-VCS_COLOR=color4
-VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
-HOST_COLOR=color3
-HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-BACKGROUND_COLOR=inactive_tab_background
-BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+if [ "$(uname)" = "Darwin"]; then
+    USER_COLOR=color3
+    USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+    VCS_COLOR=color4
+    VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
+    HOST_COLOR=color3
+    HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+    BACKGROUND_COLOR=inactive_tab_background
+    BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+else
+    USER_COLOR=color2
+    USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+    VCS_COLOR=color4
+    VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
+    HOST_COLOR=color2
+    HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+    BACKGROUND_COLOR=inactive_tab_background
+    BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+fi
+
 
 
 # Changing iTerm2 background with special escape sequence
@@ -65,8 +77,8 @@ zstyle ':vcs_info:git:*' formats '(%b) '
 
 add-zsh-hook precmd precmd
 
-fpath=(~/.just/completions $fpath)
 # Additional completions
+fpath=(~/.just/completions $fpath)
 fpath=(~/.docker/completions \\$fpath)
 fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 autoload -Uz compinit && compinit
