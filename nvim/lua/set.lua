@@ -22,3 +22,8 @@ vim.opt.relativenumber = true
 vim.cmd('autocmd VimLeave * set guicursor=a:ver25-blinkon10')
 vim.cmd('autocmd InsertEnter * :set norelativenumber')
 vim.cmd('autocmd InsertLeave * :set relativenumber')
+
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+    pattern = { "*" },
+    command = [[%s/\s\+$//e]],
+})

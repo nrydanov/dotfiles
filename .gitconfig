@@ -1,0 +1,17 @@
+# This is Git's per-user configuration file.
+[user]
+    signingkey = find.art.in.living@gmail.com
+    email = find.art.in.living@gmail.com
+    name = Nikita Rydanov
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
+[push]
+	autoSetupRemote = true
+[pull]
+	rebase = true
+[alias]
+    ch = "!fn() { git branch | fzf | xargs git checkout;}; fn"
+    s = status
+    c = commit

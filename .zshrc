@@ -1,6 +1,14 @@
+HISTFILE=$HOME/.zhistory
+SAVEHIST=1000
+HISTSIZE=999
+COLORS_FILE=~/.config/.nvimcolors
+
+LSCOLORS=excxcxdxBxgxexabagacad
+LS_COLORS="di=34:ln=32:so=32:pi=33:ex=1;31:bd=36:cd=34:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+
 # Bindings
 if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
-    alias ls='ls --color=auto'
+    alias ls='ls --color=always'
     alias gcc='gcc -fdiagnostics-color=always'
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -9,24 +17,9 @@ if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
     alias cargo-clippy='cargo-clippy --color=always'
 fi
 
+# Soeviy terminal
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
-
-# Paths
-
-HOMEBREW="/opt/homebrew/opt/"
-
-export PATH="/usr/local/smlnj/bin:$PATH"
-export PATH="$HOMEBREW/bison/bin:$PATH"
-export PATH="$HOMEBREW/llvm/bin:$PATH"
-export PATH="$HOMEBREW/ruby/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/.local/bin/miktex-dist:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
-export TMPDIR=/tmp
-export MODULAR_HOME="$HOME/.modular"
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
 
 # Aliases
 ## Vim
@@ -35,11 +28,11 @@ alias vim=nvim
 alias s="kitten ssh"
 ## Kubernetes
 alias k="kubectl"
+
 set rtp+= $HOMEBREW/fzf
 
-# Sync vim colorscheme with terminal. 
+# Sync vim colorscheme with terminal.
 # Note: TermcolorsShow plugin is required for this to work
-COLORS_FILE=~/.config/.nvimcolors
 
 if [ ! -f $COLORS_FILE ]; then
     nvim -c "TermcolorsShow" -c ":w! $COLORS_FILE" -c "q"
@@ -72,16 +65,24 @@ zstyle ':vcs_info:git:*' formats '(%b) '
 
 add-zsh-hook precmd precmd
 
-autoload compinit && compinit
+fpath=(~/.just/completions $fpath)
+# Additional completions
+fpath=(~/.docker/completions \\$fpath)
+fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
+autoload -Uz compinit && compinit
+
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+source $HOMEBREW/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source <(kubectl completion zsh)
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source "$HOME/.rye/env"
+source ~/.config/completion.zsh
 
-zstyle ':completion:*' menu select
-zstyle ':autocomplete:*complete*:*' insert-unambiguous yes 
-# Prompt format string
+skip_global_compinit=1
+
+# History tweaking
+setopt SHARE_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
 setopt PROMPT_SUBST
-PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@macbook %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
 
-export GPG_TTY=$(tty)
+# Prompt format string
+PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@%m %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '

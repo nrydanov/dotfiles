@@ -1,16 +1,3 @@
-local setup, nvimtree = pcall(require, "nvim-tree")
-if not setup then return end
-
-vim.cmd([[
-  nnoremap - :NvimTreeToggle<CR>
-]])
-
-local keymap = vim.keymap -- for conciseness
-
--- vim.opt.foldmethod = "expr"
--- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
--- vim.opt.foldenable = false --                  " Disable folding at startup.
-
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -19,7 +6,32 @@ vim.opt.termguicolors = true
 local HEIGHT_RATIO = 0.8 -- You can change this
 local WIDTH_RATIO = 0.5  -- You can change this too
 
-nvimtree.setup({
+
+local function open_nvim_tree(data)
+    -- buffer is a directory
+    local directory = vim.fn.isdirectory(data.file) == 1
+
+    if not directory then
+        return
+    end
+
+    -- create a new, empty buffer
+    vim.cmd.enew()
+
+    -- wipe the directory buffer
+    vim.cmd.bw(data.buf)
+
+    -- change to the directory
+    vim.cmd.cd(data.file)
+
+    -- open the tree
+    require("nvim-tree.api").tree.open()
+end
+
+vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+
+
+require('nvim-tree').setup({
     disable_netrw = true,
     hijack_netrw = true,
     respect_buf_cwd = true,
@@ -52,10 +64,10 @@ nvimtree.setup({
             return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
         end,
     },
-    -- filters = {
-    --   custom = { "^.git$" },
-    -- },
-    -- renderer = {
-    --   indent_width = 1,
-    -- },
+    filters = {
+        custom = { "^.git$" },
+    },
+    renderer = {
+        indent_width = 1,
+    },
 })

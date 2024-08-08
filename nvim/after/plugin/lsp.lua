@@ -38,6 +38,13 @@ local settings = {
             globals = { 'vim', 'require' }
         }
     },
+    gopls = {
+        analyses = {
+            unusedparams = true,
+        },
+        staticcheck = true,
+        gofumpt = true,
+    }
 }
 
 for _, server in ipairs(servers) do
@@ -49,15 +56,15 @@ require('lspconfig').rust_analyzer.setup {
     -- Other Configs ...
     settings = {
         ["rust-analyzer"] = {
-            rustfmt = {
-                overrideCommand = { 'leptosfmt', '--stdin', '--rustfmt' }
-            },
+            -- rustfmt = {
+            --     overrideCommand = { 'leptosfmt', '--stdin', '--rustfmt' }
+            -- },
             cargo = {
                 features = "all"
             },
-            checkOnSave = {
-                command = "clippy",
-            },
+            -- checkOnSave = {
+            --     command = "clippy",
+            -- },
             procMacro = {
                 ignored = {
                     leptos_macro = {
