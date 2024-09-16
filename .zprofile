@@ -18,9 +18,11 @@ export PATH="$HOME/.local/bin/miktex-dist:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH"
 
-export HOMEBREW="/opt/homebrew"
+if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
+    export PATH="/opt/homebrew/bin:$PATH"
+    export HOMEBREW="/opt/homebrew"
+fi
 
 # Homes
 export MODULAR_HOME="$HOME/.modular"

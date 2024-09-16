@@ -15,9 +15,10 @@ if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
     alias egrep='egrep --color=auto'
     alias cargo='cargo --color=always'
     alias cargo-clippy='cargo-clippy --color=always'
-fi
 
-set rtp+= $HOMEBREW/fzf
+    fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
+    source $HOMEBREW/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+fi
 
 # Soeviy terminal
 bindkey '^[[A' up-line-or-search
@@ -39,7 +40,7 @@ if [ ! -f $COLORS_FILE ]; then
     cat $COLORS_FILE >> ~/.config/kitty/kitty.conf
 fi
 
-if [ "$(uname)" = "Darwin"]; then
+if [ "$(uname)" = "Darwin" ]; then
     USER_COLOR=color3
     USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
     VCS_COLOR=color4
@@ -80,11 +81,10 @@ add-zsh-hook precmd precmd
 # Additional completions
 fpath=(~/.just/completions $fpath)
 fpath=(~/.docker/completions \\$fpath)
-fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
+
 autoload -Uz compinit && compinit
 
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
-source $HOMEBREW/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source <(kubectl completion zsh)
 source "$HOME/.rye/env"
 source ~/.config/completion.zsh
