@@ -56,9 +56,9 @@ require('lspconfig').rust_analyzer.setup {
     -- Other Configs ...
     settings = {
         ["rust-analyzer"] = {
-            -- rustfmt = {
-            --     overrideCommand = { 'leptosfmt', '--stdin', '--rustfmt' }
-            -- },
+            rustfmt = {
+                overrideCommand = { 'leptosfmt', '--stdin', '--rustfmt' }
+            },
             cargo = {
                 features = "all"
             },
@@ -70,7 +70,7 @@ require('lspconfig').rust_analyzer.setup {
                     leptos_macro = {
                         -- optional: --
                         -- "component",
-                        "server",
+                        -- "server",
                     },
                 },
             },

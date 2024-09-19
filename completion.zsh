@@ -8,9 +8,11 @@ zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
+
 bindkey              '^I' menu-select
 bindkey "$terminfo[kcbt]" menu-select
-bindkey -M menuselect '^M' .accept-line
+bindkey -M menuselect              '^I'         menu-complete
+bindkey -M menuselect "$terminfo[kcbt]" reverse-menu-complete
 bindkey -M menuselect  '^[[D' .backward-char  '^[OD' .backward-char
 bindkey -M menuselect  '^[[C'  .forward-char  '^[OC'  .forward-char
 
@@ -18,4 +20,4 @@ zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 zstyle ':autocomplete:*history*:*' insert-unambiguous yes
 zstyle ':autocomplete:menu-search:*' insert-unambiguous yes
 
-zstyle ':autocomplete:*' delay 0.1
+zstyle ':autocomplete:*' delay 0.05

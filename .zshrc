@@ -8,6 +8,8 @@ LS_COLORS="di=34:ln=32:so=32:pi=33:ex=1;31:bd=36:cd=34:su=30;41:sg=30;46:tw=30;4
 
 # Bindings
 if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
+    source $HOMEBREW/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
     alias ls='ls --color=always'
     alias gcc='gcc -fdiagnostics-color=always'
     alias grep='grep --color=auto'
@@ -17,7 +19,6 @@ if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
     alias cargo-clippy='cargo-clippy --color=always'
 
     fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
-    source $HOMEBREW/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 fi
 
 # Soeviy terminal
@@ -28,7 +29,7 @@ bindkey '^[[B' down-line-or-search
 ## Vim
 alias vim=nvim
 ## Kitty SSH
-alias s="kitten ssh"
+alias ssh="kitten ssh"
 ## Kubernetes
 alias k="kubectl"
 
@@ -60,8 +61,6 @@ else
     BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 fi
 
-
-
 # Changing iTerm2 background with special escape sequence
 echo -e "\033]Ph$BACKGROUND_COLOR_CODE\033\\"
 
@@ -82,14 +81,14 @@ add-zsh-hook precmd precmd
 fpath=(~/.just/completions $fpath)
 fpath=(~/.docker/completions \\$fpath)
 
-autoload -Uz compinit && compinit
+skip_global_compinit=1
 
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
 source <(kubectl completion zsh)
 source "$HOME/.rye/env"
-source ~/.config/completion.zsh
+source ~/.config/dotfiles/completion.zsh
 
-skip_global_compinit=1
+export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 # History tweaking
 setopt SHARE_HISTORY
@@ -98,3 +97,8 @@ setopt PROMPT_SUBST
 
 # Prompt format string
 PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@%m %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
+
+bindkey '^[[1;3D' backward-word  # alt-left
+bindkey '^[[1;3C' forward-word   # alt-right
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
