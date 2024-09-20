@@ -17,11 +17,13 @@ if [ -x /usr/bin/dircolors ]; then
     alias cargo='cargo --color=always'
     alias cargo-clippy='cargo-clippy --color=always'
 
-    fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 fi
 
 if [ "$(uname)" = "Darwin" ]; then
     source $HOMEBREW/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+    fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
+else
+    source ~/.config/dotfiles/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 fi
 
 # Soeviy terminal
