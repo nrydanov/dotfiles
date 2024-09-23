@@ -7,7 +7,7 @@ LSCOLORS=excxcxdxBxgxexabagacad
 LS_COLORS="di=34:ln=32:so=32:pi=33:ex=1;31:bd=36:cd=34:su=30;41:sg=30;46:tw=30;42:ow=30;43"
 
 # Bindings
-if [ -x /usr/bin/dircolors ]; then
+if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
 
     alias ls='ls --color=always'
     alias gcc='gcc -fdiagnostics-color=always'

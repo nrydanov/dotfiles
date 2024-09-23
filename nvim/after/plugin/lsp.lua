@@ -12,7 +12,8 @@ local servers = {
     "typst_lsp",
     "lua_ls",
     "ruff_lsp",
-    "texlab"
+    "texlab",
+    "millet"
 }
 
 local settings = {
@@ -77,3 +78,42 @@ require('lspconfig').rust_analyzer.setup {
         },
     }
 }
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = "*.sml",
+    callback = function()
+        -- Get the root directory (current working directory)
+        local root_dir = vim.fn.getcwd()
+        -- Compute the relative path from the root directory to the current file
+        local relative_path = vim.fn.expand("%:.")
+
+        -- Define the path to the sources.mlb file in the root directory
+        local sources_file = root_dir .. '/sources.mlb'
+        local toml_file = root_dir .. '/millet.toml'
+        -- Open the sources.mlb file in write mode
+        local f = io.open(sources_file, 'w')
+        local toml = io.open(toml_file, 'w')
+        if toml then
+            toml:close()
+        end
+        if f then
+            -- Write the relative path into the sources.mlb file
+            f:write(relative_path .. '\n')
+            f:close()
+        else
+            print('Could not open ' .. sources_file .. ' for writing')
+        end
+        vim.cmd(":LspRestart")
+    end
+})
+
+vim.api.nvim_create_autocmd({ "VimLeave" }, {
+    pattern = "*.sml",
+    callback = function()
+        local root_dir = vim.fn.getcwd()
+        local sources_file = root_dir .. '/sources.mlb'
+        local toml_file = root_dir .. "/millet.toml"
+        os.remove(sources_file)
+        os.remove(toml_file)
+    end
+})

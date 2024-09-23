@@ -20,4 +20,4 @@ zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 zstyle ':autocomplete:*history*:*' insert-unambiguous yes
 zstyle ':autocomplete:menu-search:*' insert-unambiguous yes
 
-zstyle ':autocomplete:*' delay 0.05
+zstyle ':autocomplete:*' delay 0.1

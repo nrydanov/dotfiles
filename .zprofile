@@ -10,18 +10,19 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 
 export PATH="/usr/local/smlnj/bin:$PATH"
-export PATH="$HOMEBREW/bison/bin:$PATH"
-export PATH="$HOMEBREW/llvm/bin:$PATH"
-export PATH="$HOMEBREW/ruby/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin/miktex-dist:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 
-if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
-    export PATH="/opt/homebrew/bin:$PATH"
+if [ "$(uname)" = "Darwin" ]; then
     export HOMEBREW="/opt/homebrew"
+    export PATH="$HOMEBREW/bin:$PATH"
+    export PATH="$HOMEBREW/Cellar/millet/0.14.7/bin:$PATH"
+    export PATH="$HOMEBREW/bison/bin:$PATH"
+    export PATH="$HOMEBREW/llvm/bin:$PATH"
+    export PATH="$HOMEBREW/ruby/bin:$PATH"
 fi
 
 # Homes

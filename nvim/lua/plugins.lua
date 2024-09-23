@@ -103,6 +103,8 @@ return require('packer').startup(function(use)
     }
     use { 'akinsho/git-conflict.nvim', tag = "*" }
     use "j-hui/fidget.nvim"
+    use "milanglacier/yarepl.nvim"
+    use 'RRethy/vim-illuminate'
     if packer then
         require('packer').sync()
     end
