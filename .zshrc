@@ -33,8 +33,6 @@ bindkey '^[[B' down-line-or-search
 # Aliases
 ## Vim
 alias vim=nvim
-## Kitty SSH
-alias ssh="kitten ssh"
 ## Kubernetes
 alias k="kubectl"
 
@@ -47,6 +45,16 @@ if [ ! -f $COLORS_FILE ]; then
 fi
 
 if [ "$(uname)" = "Darwin" ]; then
+    # Light
+    # USER_COLOR=color8
+    # USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+    # VCS_COLOR=color8
+    # VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
+    # HOST_COLOR=color8
+    # HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+    # BACKGROUND_COLOR=inactive_tab_background
+    # BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+    # Dark
     USER_COLOR=color3
     USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
     VCS_COLOR=color4
@@ -56,6 +64,7 @@ if [ "$(uname)" = "Darwin" ]; then
     BACKGROUND_COLOR=inactive_tab_background
     BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
 else
+    # Dark
     USER_COLOR=color2
     USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
     VCS_COLOR=color4
