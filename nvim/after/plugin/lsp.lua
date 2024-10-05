@@ -4,7 +4,7 @@ require "luasnip.loaders.from_vscode".load {}
 local lsp = require "lspconfig"
 
 local servers = {
-    "pylsp",
+    "pyright",
     "clangd",
     "gopls",
     "intelephense",
