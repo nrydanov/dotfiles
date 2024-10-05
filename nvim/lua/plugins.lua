@@ -105,6 +105,10 @@ return require('packer').startup(function(use)
     use "j-hui/fidget.nvim"
     use "milanglacier/yarepl.nvim"
     use 'RRethy/vim-illuminate'
+    use { 'supermaven-inc/supermaven-nvim', commit = "40bde487fe31723cdd180843b182f70c6a991226", }
+    use { 'https://github.com/apple/pkl-neovim',
+        after = "nvim-treesitter",
+        run = ":TSInstall! pkl" } -- Pkl syntax highlighting
     if packer then
         require('packer').sync()
     end
