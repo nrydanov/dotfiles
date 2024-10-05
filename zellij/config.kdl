@@ -187,6 +187,9 @@ keybinds clear-defaults=true {
         bind "Alt 5" {GoToTab 5; }
         bind "Alt 6" {GoToTab 6; }
         bind "Alt 7" {GoToTab 7; }
+        bind "Alt 7" {GoToTab 7; }
+        bind "Alt n" {NewTab;}
+        bind "Alt w" {CloseTab;}
     }
 }
 
