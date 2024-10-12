@@ -14,9 +14,9 @@ local packer = ensure_packer()
 return require('packer').startup(function(use)
     -- Vim Package Manager
     use 'wbthomason/packer.nvim'
-    -- use 'numirias/semshi' -- :UpdateRemotePlugins
+    use 'numirias/semshi'
     -- LSP Package Manager
-    use {
+   use {
         {
             "williamboman/mason.nvim",
             opts = {
@@ -25,7 +25,7 @@ return require('packer').startup(function(use)
                     "ruff",
                     "pyright"
                 }
-            }
+            },
         },
         "williamboman/mason-lspconfig.nvim",
     }
@@ -35,33 +35,22 @@ return require('packer').startup(function(use)
     }
     -- Completion
     use {
-        'hrsh7th/nvim-cmp',
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-path',
-        'hrsh7th/cmp-cmdline'
+        'ms-jpq/coq_nvim',
+        'ms-jpq/coq.artifacts'
     }
+
     -- Fuzzy search
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.5',
         -- or                            , branch = '0.1.x',
-        requires = { { 'nvim-lua/plenary.nvim' } }
-    }
-    -- Non-LSP actions and more
-    use {
-        'nvimtools/none-ls.nvim',
-    }
-    -- LSP: Snippets
-    use {
-        'L3MON4D3/LuaSnip',
-        'saadparwaiz1/cmp_luasnip',
+        requires = { 'nvim-lua/plenary.nvim' }
     }
     -- LSP signature pop-up
     use 'ray-x/lsp_signature.nvim'
     -- Syntax highlighting
     use {
         'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
+        run = ':TSUpdate',
     }
     -- Pairing brackets
     use 'windwp/nvim-autopairs'
@@ -70,7 +59,7 @@ return require('packer').startup(function(use)
     -- Status line
     use {
         'nvim-lualine/lualine.nvim',
-        requires = 'nvim-tree/nvim-web-devicons'
+        requires = 'nvim-tree/nvim-web-devicons',
     }
     -- Git integration
     use 'lewis6991/gitsigns.nvim'
@@ -84,7 +73,6 @@ return require('packer').startup(function(use)
     }
     -- Colorscheme
     use 'nrydanov/one-nvim'
-    use 'Mofiqul/vscode.nvim'
     use 'tjdevries/colorbuddy.vim'
     use {
         'sonph/onehalf',
@@ -93,22 +81,18 @@ return require('packer').startup(function(use)
     -- Misc
     use 'lukas-reineke/indent-blankline.nvim'
     use "kaarmu/typst.vim"
-    use "linux-cultist/venv-selector.nvim"
-    use {
-        "scalameta/nvim-metals",
-        requires = {
-            "nvim-lua/plenary.nvim",
-            "mfussenegger/nvim-dap",
-        }
-    }
+    use { "linux-cultist/venv-selector.nvim", branch = 'regexp' }
     use { 'akinsho/git-conflict.nvim', tag = "*" }
-    use "j-hui/fidget.nvim"
+    use {
+        "j-hui/fidget.nvim",
+    }
     use "milanglacier/yarepl.nvim"
     use 'RRethy/vim-illuminate'
     use { 'supermaven-inc/supermaven-nvim', commit = "40bde487fe31723cdd180843b182f70c6a991226", }
     use { 'https://github.com/apple/pkl-neovim',
         after = "nvim-treesitter",
         run = ":TSInstall! pkl" } -- Pkl syntax highlighting
+    use 'dstein64/vim-startuptime'
     if packer then
         require('packer').sync()
     end

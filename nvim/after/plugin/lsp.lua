@@ -1,7 +1,17 @@
 require "lsp_signature".setup {}
-require "luasnip.loaders.from_vscode".load {}
+vim.g.coq_settings = {
+    auto_start = 'shut-up',
 
+}
+local coq = require "coq"
 local lsp = require "lspconfig"
+
+vim.api.nvim_create_autocmd( "VimEnter", {
+    -- group = "COQ", command = COQnow -s below
+    callback = function()
+        vim.cmd("COQnow -s")
+    end
+} )
 
 local servers = {
     "pyright",
@@ -49,9 +59,8 @@ local settings = {
 }
 
 for _, server in ipairs(servers) do
-    lsp[server].setup({ settings = settings })
+    lsp[server].setup(coq.lsp_ensure_capabilities { settings = settings })
 end
-
 
 require('lspconfig').rust_analyzer.setup {
     -- Other Configs ...
