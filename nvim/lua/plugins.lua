@@ -16,7 +16,7 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
     use 'numirias/semshi'
     -- LSP Package Manager
-   use {
+    use {
         {
             "williamboman/mason.nvim",
             opts = {
@@ -96,4 +96,8 @@ return require('packer').startup(function(use)
     if packer then
         require('packer').sync()
     end
+    use 'psliwka/vim-smoothie'
+
+    use 'ray-x/go.nvim'
+    use 'ray-x/guihua.lua'
 end)
