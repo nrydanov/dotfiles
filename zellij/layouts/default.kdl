@@ -4,7 +4,7 @@ layout {
             plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
                 format_left   "{mode} #[fg=#89B4FA,bold]{session}"
                 format_center "{tabs}"
-                format_right  "{command_git_branch} {datetime}"
+                format_right  "{datetime}"
                 format_space  ""
 
                 border_enabled  "false"
@@ -12,7 +12,7 @@ layout {
                 border_format   "#[fg=#6C7086]{char}"
                 border_position "top"
 
-                hide_frame_for_single_pane "true"
+                hide_frame_for_single_pane "false"
 
                 mode_normal        "#[bg=#a6da95,fg=#181926,bold] NORMAL#[bg=#181926,fg=#a6da95]"
                 mode_locked        "#[bg=#6e738d,fg=#181926,bold] LOCKED #[bg=#181926,fg=#6e738d]"
@@ -38,10 +38,13 @@ layout {
                 command_git_branch_rendermode  "static"
 
                 datetime        "#[fg=#6C7086,bold] {format} "
-                datetime_format "%A, %d %b %Y %H:%M"
+                datetime_format "%H:%M"
                 datetime_timezone "Europe/Samara"
             }
         }
         children
+        pane size=1 borderless=true {
+            plugin location="zellij:status-bar"
+        }
     }
 }
