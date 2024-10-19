@@ -1,4 +1,3 @@
-
 export LANG="en_US.UTF-8"
 export SHELL="/bin/zsh"
 export EDITOR="nvim"
@@ -16,6 +15,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 
+# MacOS specific exports
 if [ "$(uname)" = "Darwin" ]; then
     export HOMEBREW="/opt/homebrew"
     export PATH="$HOMEBREW/bin:$PATH"
@@ -23,10 +23,11 @@ if [ "$(uname)" = "Darwin" ]; then
     export PATH="$HOMEBREW/bison/bin:$PATH"
     export PATH="$HOMEBREW/llvm/bin:$PATH"
     export PATH="$HOMEBREW/ruby/bin:$PATH"
+
+    export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
 # Homes
-export MODULAR_HOME="$HOME/.modular"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
-
 export GPG_TTY=$(tty)
+export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'

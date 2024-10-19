@@ -21,3 +21,14 @@ zstyle ':autocomplete:*history*:*' insert-unambiguous yes
 zstyle ':autocomplete:menu-search:*' insert-unambiguous yes
 
 zstyle ':autocomplete:*' delay 0.1
+
+export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+
+# History tweaking
+HISTFILE=$HOME/.zhistory
+SAVEHIST=1000
+HISTSIZE=999
+
+setopt SHARE_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt PROMPT_SUBST
