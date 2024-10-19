@@ -62,3 +62,5 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end, opts)
     end,
 })
+
+vim.keymap.set('n', 'I', 'i', { noremap = true, silent = true })
