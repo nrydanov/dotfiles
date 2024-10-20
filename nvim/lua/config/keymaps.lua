@@ -6,7 +6,6 @@ vim.keymap.set('n', 'E', "$", { remap = true })
 vim.keymap.set('n', 'S', "0", { remap = true })
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { remap = true })
 
-
 vim.api.nvim_set_keymap("n", "<space>v", ":VenvSelect<CR>", { noremap = true, silent = true })
 
 vim.api.nvim_set_keymap('n', '<space>o', ':Telescope find_files<CR>',
