@@ -13,6 +13,7 @@ if [ ! -d ${XDG_DATA_HOME}/zsh/completions ]; then
     docker completion zsh > ${XDG_DATA_HOME}/zsh/completions/_docker
     minikube completion zsh > ${XDG_DATA_HOME}/zsh/completions/_minikube
     zellij setup --completion zsh > ${XDG_DATA_HOME}/zsh/completions/_zellij
+    rustup completions zsh > ${XDG_DATA_HOME}/zsh/completions/_rustup
 fi
 
 fpath+=${XDG_DATA_HOME}/zsh/completions
