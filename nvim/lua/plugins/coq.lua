@@ -12,6 +12,14 @@ return {
             weights = {
                 prefix_matches = 1.5,
                 edit_distance = 1.5
+            },
+            display = {
+                pum = {
+                    fast_close = false
+                }
+            },
+            completion = {
+                skip_after = { "{", "}", "[", "]", "(", ")", "<", ">", "'", "\"" },
             }
             -- Your COQ settings here
         }
