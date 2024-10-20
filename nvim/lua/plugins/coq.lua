@@ -6,13 +6,12 @@ return {
         vim.g.coq_settings = {
             auto_start = 'shut-up', -- if you want to start COQ at startup
             match = {
-                fuzzy_cutoff = 0.2,
                 look_ahead = 8,
                 exact_matches = 0,
             },
             weights = {
-                prefix_matches = 1.0,
-                edit_distance = 2.0
+                prefix_matches = 1.5,
+                edit_distance = 1.5
             }
             -- Your COQ settings here
         }
