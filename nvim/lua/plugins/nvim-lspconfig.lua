@@ -40,16 +40,17 @@ return {
 
         -- List of servers to set up
         local servers = {
-            "pyright",
+            "pylsp",
             "clangd",
             "gopls",
             "intelephense",
             "rust_analyzer",
             "typst_lsp",
             "lua_ls",
-            "ruff_lsp",
+            "ruff",
             "texlab",
             "millet",
+            "ts_ls"
         }
 
         -- Setup each LSP server using COQ capabilities

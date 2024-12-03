@@ -20,7 +20,8 @@ zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 zstyle ':autocomplete:*history*:*' insert-unambiguous yes
 zstyle ':autocomplete:menu-search:*' insert-unambiguous yes
 
-zstyle ':autocomplete:*' delay 0.1
+zstyle ':autocomplete:*' delay 0.05
+zstyle ':autocomplete:*' min-input-size 3
 
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
 

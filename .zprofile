@@ -11,9 +11,9 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export PATH="/usr/local/smlnj/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin/miktex-dist:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
+
 
 # MacOS specific exports
 if [ "$(uname)" = "Darwin" ]; then
@@ -24,6 +24,7 @@ if [ "$(uname)" = "Darwin" ]; then
     export PATH="$HOMEBREW/llvm/bin:$PATH"
     export PATH="$HOMEBREW/ruby/bin:$PATH"
 
+
     export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
@@ -31,3 +32,7 @@ fi
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
 export GPG_TTY=$(tty)
 export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
+
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
