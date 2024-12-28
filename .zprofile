@@ -28,6 +28,11 @@ if [ "$(uname)" = "Darwin" ]; then
     export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
+if [ "$(uname)" = "Linux" ]; then
+    export PATH="$HOME/.local/bin:$PATH"
+    export PATH="/opt/nvim:$PATH"
+fi
+
 # Homes
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
 export GPG_TTY=$(tty)

@@ -20,8 +20,10 @@ return {
             },
             completion = {
                 skip_after = { "{", "}", "[", "]", "(", ")", "<", ">", "'", "\"", ' ', ',', ';', ':', '.', '?', '!' },
-            }
-            -- Your COQ settings here
+            },
         }
+    end,
+    install = function()
+        vim.cmd('COQdeps')
     end
 }

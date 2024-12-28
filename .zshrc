@@ -7,8 +7,6 @@ source ~/.config/dotfiles/zsh/git.zsh
 source ~/.config/dotfiles/zsh/autocompletion.zsh
 source ~/.config/dotfiles/zsh/completion.zsh
 
-source "$HOME/.rye/env"
-
 # Prompt format string
 PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@%m %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
 

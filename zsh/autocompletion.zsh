@@ -1,10 +1,3 @@
-if [ "$(uname)" = "Darwin" ]; then
-    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    source $HOMEBREW/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-else
-    source ~/.config/dotfiles/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-fi
-
 # Additional completions
 if [ ! -d ${XDG_DATA_HOME}/zsh/completions ]; then
     mkdir -p ${XDG_DATA_HOME}/zsh/completions

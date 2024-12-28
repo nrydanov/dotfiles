@@ -45,7 +45,6 @@ return {
             "gopls",
             "intelephense",
             "rust_analyzer",
-            "typst_lsp",
             "lua_ls",
             "ruff",
             "texlab",
@@ -56,9 +55,11 @@ return {
         -- Setup each LSP server using COQ capabilities
         for _, server in ipairs(servers) do
             local server_settings = settings[server] or {}
+
             lsp[server].setup(coq.lsp_ensure_capabilities {
                 settings = server_settings,
             })
         end
+
     end,
 }
