@@ -40,7 +40,7 @@ return {
 
         -- List of servers to set up
         local servers = {
-            "pylsp",
+            "pyright",
             "clangd",
             "gopls",
             "intelephense",
