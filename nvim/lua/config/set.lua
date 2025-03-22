@@ -1,80 +1,87 @@
--- Enable true color support in the terminal
-vim.opt.termguicolors = true
+-- ============================================================================
+-- General Appearance & Behavior
+-- ============================================================================
+vim.opt.termguicolors = true -- Enable true color support
+vim.opt.mouse = "a"          -- Enable mouse support in all modes
+vim.opt.background = "dark"  -- Use a dark background for better contrast
+vim.opt.syntax = "on"        -- Enable syntax highlighting
 
--- Show line numbers
-vim.opt.nu = true
+-- ============================================================================
+-- Line Numbers & Cursor
+-- ============================================================================
+vim.opt.nu = true             -- Show absolute line numbers
+vim.opt.relativenumber = true -- Show relative line numbers
+vim.opt.cursorline = true     -- Highlight the current line
 
--- Highlight the current line where the cursor is
-vim.opt.cursorline = true
+-- Autocmds to toggle relative numbers when entering/leaving Insert mode
+vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+    callback = function() vim.opt.relativenumber = false end,
+})
+vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+    callback = function() vim.opt.relativenumber = true end,
+})
 
--- Ignore case when searching
-vim.opt.ignorecase = true
+-- ============================================================================
+-- Search Settings
+-- ============================================================================
+vim.opt.ignorecase = true -- Ignore case in search patterns
+vim.opt.smartcase = true  -- Override ignorecase if uppercase is used
+vim.opt.incsearch = true  -- Show incremental search results
 
--- Highlight columns at position 80 and 100 for better readability (soft line limits)
+-- ============================================================================
+-- Indentation & Tabs
+-- ============================================================================
+vim.opt.tabstop = 4        -- Number of spaces that a tab counts for
+vim.opt.softtabstop = 4    -- Number of spaces inserted for a soft tab
+vim.opt.shiftwidth = 4     -- Spaces per indentation level
+vim.opt.expandtab = true   -- Use spaces instead of tabs
+vim.opt.autoindent = true  -- Maintain indentation from previous line
+vim.opt.smartindent = true -- Insert indents automatically in some cases
+
+-- ============================================================================
+-- Undo, Swap & Backup Files
+-- ============================================================================
+vim.opt.undofile = true  -- Persist undo history across sessions
+vim.opt.swapfile = false -- Disable swap files to avoid clutter
+vim.opt.backup = false   -- Disable backup files if using version control
+
+-- ============================================================================
+-- Editor UI Extras
+-- ============================================================================
+vim.opt.signcolumn = "yes"               -- Always show the sign column to avoid shifting
+vim.opt.completeopt = "menuone,noselect" -- Better completion: show menu even for one item and don't auto-select
+vim.opt.showmatch = true                 -- Highlight matching parentheses and brackets
+vim.opt.mat = 2                          -- Short delay (in tenths of a second) for matching bracket highlighting
+vim.opt.pumheight = 5                    -- Limit pop-up menu height to 5 items
+
+-- Highlight soft line limits for readability
 vim.opt.colorcolumn = "80,100"
 
--- Set tab width to 4 spaces
-vim.opt.tabstop = 4
+-- ============================================================================
+-- Clipboard & Filetype Settings
+-- ============================================================================
+vim.opt.clipboard = "unnamedplus"    -- Use system clipboard for yank, delete, change, and put
+vim.cmd('filetype plugin indent on') -- Enable filetype detection, plugins, and indenting
 
--- Number of spaces inserted for a soft tab
-vim.opt.softtabstop = 4
-
--- Number of spaces to use for each step of (auto)indent
-vim.opt.shiftwidth = 4
-
--- Convert tabs to spaces
-vim.opt.expandtab = true
-
-vim.opt.autoindent = true
-
-vim.opt.smartindent = true
-
--- Save undo history to a file to maintain it across sessions
-vim.opt.undofile = true
-
--- Always show the sign column (e.g., for error signs) to avoid text shifting
-vim.opt.signcolumn = "yes"
-
--- Configure completion options for longer matches and a pop-up menu with at least one item
-vim.opt.completeopt = "longest,menuone"
-
--- Highlight matching brackets and parentheses when the cursor is over them
-vim.opt.showmatch = true
-
--- Set a short delay for showing matching brackets/parentheses
-vim.opt.mat = 2
-
--- Limit the height of the pop-up menu to 5 items
-vim.opt.pumheight = 5
-
--- Enable syntax highlighting
-vim.opt.syntax = "on"
-
--- Set background color to dark to improve contrast with color schemes
-vim.opt.background = "dark"
-
--- Use the system clipboard for all yank, delete, change, and put operations
-vim.opt.clipboard = "unnamedplus"
-
--- Show relative line numbers to help navigate quickly with line numbers
-vim.opt.relativenumber = true
-
--- Disable relative line numbers when entering Insert mode
-vim.cmd('autocmd InsertEnter * :set norelativenumber')
-
--- Re-enable relative line numbers when leaving Insert mode
-vim.cmd('autocmd InsertLeave * :set relativenumber')
-
--- Automatically remove trailing whitespace before saving a file
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    pattern = { "*" },
+-- ============================================================================
+-- Auto Commands
+-- ============================================================================
+-- Automatically remove trailing whitespace on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = "*",
     command = [[%s/\s\+$//e]],
 })
 
--- Set the username for the "instant" plugin (or other related plugins that require a username)
-vim.g.instant_username = "nrydanov"
+-- ============================================================================
+-- Plugin-Specific Settings
+-- ============================================================================
+vim.g.instant_username = "nrydanov" -- Set username for the "instant" plugin (if used)
 
 
-
-vim.cmd('filetype plugin indent on')
-
+-- ============================================================================
+-- File Backup, Swap, and Undo Settings
+-- ============================================================================
+vim.opt.backup = false      -- Disable backup files (if using version control)
+vim.opt.writebackup = false -- Disable backup before overwriting files
+vim.opt.swapfile = false    -- Disable swap files (adjust if needed)
+vim.opt.undofile = true     -- Enable persistent undo

@@ -36,6 +36,10 @@ return {
                 staticcheck = true,
                 gofumpt = true,
             },
+            clangd = {
+                cmd = { "clangd", "-std=c++20" },
+                filetypes = { "c", "cpp", "objc", "objcpp" },
+            }
         }
 
         -- List of servers to set up
@@ -60,6 +64,5 @@ return {
                 settings = server_settings,
             })
         end
-
     end,
 }

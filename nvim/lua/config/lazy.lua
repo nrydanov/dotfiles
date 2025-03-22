@@ -1,37 +1,48 @@
+-- ============================================================================
+-- Lazy.nvim Bootstrap Configuration
+-- ============================================================================
+
+-- Define the installation path for lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+-- Bootstrap lazy.nvim if not already installed
 if not vim.loop.fs_stat(lazypath) then
-    -- bootstrap lazy.nvim
-    -- stylua: ignore
-    vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable",
-        lazypath })
+    vim.fn.system({
+        "git", "clone", "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
 end
+
+-- Prepend lazy.nvim to the runtime path
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
+
+-- ============================================================================
+-- Lazy.nvim Setup
+-- ============================================================================
 
 require("lazy").setup({
     spec = {
-        -- add LazyVim and import its plugins
-        -- import any extras modules here
-        -- { import = "lazyvim.plugins.extras.lang.rust" },
-        -- import/override with your plugins
+        -- Import your plugin specifications.
         { import = "plugins" },
+        -- Uncomment the next line to import additional modules (example for Rust):
+        -- { import = "lazyvim.plugins.extras.lang.rust" },
     },
     defaults = {
-        -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
-        -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
+        -- Load custom plugins during startup (set to true for lazy-loading custom plugins)
         lazy = false,
-        -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-        -- have outdated releases, which may break your Neovim install.
-        version = false, -- always use the latest git commit
-        -- version = "*", -- try installing the latest stable version for plugins that support semver
+        -- Always use the latest commit instead of versioning; adjust as needed.
+        version = false,
     },
     ui = {
-        border = "rounded",
+        border = "rounded", -- Use rounded borders in the Lazy.nvim UI
     },
     performance = {
         rtp = {
-            -- disable some rtp plugins
             disabled_plugins = {
                 "gzip",
+                -- Uncomment the plugins below if you do not use them:
                 -- "matchit",
                 -- "matchparen",
                 -- "netrwPlugin",
