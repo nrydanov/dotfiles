@@ -1,1 +1,4 @@
-return { 'sonph/onehalf' }
+return {
+    "MarcoKorinth/onehalf.nvim",
+    lazy = false
+}

@@ -31,6 +31,13 @@ zinit light-mode for \
     marlonrichert/zsh-autocomplete \
     zsh-users/zsh-syntax-highlighting
 
+
+# zsh-fzf-history-search
+zinit ice lucid wait'0'
+zinit light joshskidmore/zsh-fzf-history-search
+# -------------------------------------------------
+
+
 # -------------------------------------------------
 # End of Zinit configuration
 # -------------------------------------------------

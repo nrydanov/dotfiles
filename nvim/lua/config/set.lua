@@ -2,7 +2,6 @@
 -- General Appearance & Behavior
 -- ============================================================================
 vim.opt.termguicolors = true -- Enable true color support
-vim.opt.mouse = "a"          -- Enable mouse support in all modes
 vim.opt.background = "dark"  -- Use a dark background for better contrast
 vim.opt.syntax = "on"        -- Enable syntax highlighting
 
@@ -85,3 +84,8 @@ vim.opt.backup = false      -- Disable backup files (if using version control)
 vim.opt.writebackup = false -- Disable backup before overwriting files
 vim.opt.swapfile = false    -- Disable swap files (adjust if needed)
 vim.opt.undofile = true     -- Enable persistent undo
+vim.diagnostic.config({
+    virtual_lines = true,
+    virtual_text = true,
+
+})

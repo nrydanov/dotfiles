@@ -10,14 +10,18 @@ zstyle ':completion:*:messages' format '%F{purple}-- %d --%f'
 zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
 zstyle ':completion:*:default' list-colors "${LS_COLORS}"
 
-# Bind Tab (and terminfo equivalent) to trigger menu selection
-bindkey '^I' menu-select
+bindkey              '^I' menu-select
 bindkey "$terminfo[kcbt]" menu-select
+bindkey -M menuselect              '^I'         menu-complete
+bindkey -M menuselect "$terminfo[kcbt]" reverse-menu-complete
+bindkey -M menuselect  '^[[D' .backward-char  '^[OD' .backward-char
+bindkey -M menuselect  '^[[C'  .forward-char  '^[OC'  .forward-char
+
 
 # History settings
 HISTFILE="$HOME/.zhistory"
-SAVEHIST=1000
-HISTSIZE=999
+SAVEHIST=10000
+HISTSIZE=9999
 
 setopt SHARE_HISTORY HIST_EXPIRE_DUPS_FIRST PROMPT_SUBST
 
