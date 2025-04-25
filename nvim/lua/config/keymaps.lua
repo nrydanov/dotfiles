@@ -8,8 +8,8 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { noremap = true, silent = t
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { noremap = true, silent = true })
 
 -- Custom motion mappings (ensure these overrides are intentional)
-vim.keymap.set("n", "E", "$", { remap = true, silent = true })  -- Jump to end of line
-vim.keymap.set("n", "S", "0", { remap = true, silent = true })  -- Jump to beginning of line
+vim.keymap.set("n", "E", "$", { remap = true, silent = true }) -- Jump to end of line
+vim.keymap.set("n", "S", "0", { remap = true, silent = true }) -- Jump to beginning of line
 
 -- Terminal mode mapping to exit terminal insert mode
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
@@ -31,28 +31,28 @@ vim.keymap.set("n", "I", "i", { noremap = true, silent = true })
 -- LSP-related (Buffer-Local) Mappings
 -- ============================================================================
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-  callback = function(ev)
-    -- Enable omni-completion (<c-x><c-o>)
-    vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+    group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+    callback = function(ev)
+        -- Enable omni-completion (<c-x><c-o>)
+        vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-    local opts = { buffer = ev.buf, noremap = true, silent = true }
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-    vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
-    vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
-    vim.keymap.set("n", "<space>wl", function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
-    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
-    vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
-    vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
-    vim.keymap.set({ "n", "v" }, "<space>f", function()
-      vim.lsp.buf.format({ async = true, remap = false })
-    end, opts)
-  end,
+        local opts = { buffer = ev.buf, noremap = true, silent = true }
+        vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+        vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
+        vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
+        vim.keymap.set("n", "<space>wl", function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        end, opts)
+        vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
+        vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
+        vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
+        vim.keymap.set({ "n", "v" }, "<space>f", function()
+            vim.lsp.buf.format({ async = true, remap = false })
+        end, opts)
+    end,
 })
 
 
@@ -60,11 +60,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- Filetype-specific Settings
 -- ============================================================================
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "cpp", "hpp", "c", "h" },
-  callback = function()
-    vim.opt_local.tabstop = 2
-    vim.opt_local.shiftwidth = 2
-    vim.opt_local.expandtab = true
-  end,
+    pattern = { "cpp", "hpp", "c", "h" },
+    callback = function()
+        vim.opt_local.tabstop = 2
+        vim.opt_local.shiftwidth = 2
+        vim.opt_local.expandtab = true
+    end,
 })
-

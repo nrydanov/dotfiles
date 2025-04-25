@@ -85,7 +85,6 @@ vim.opt.writebackup = false -- Disable backup before overwriting files
 vim.opt.swapfile = false    -- Disable swap files (adjust if needed)
 vim.opt.undofile = true     -- Enable persistent undo
 vim.diagnostic.config({
-    virtual_lines = true,
     virtual_text = true,
 
 })
