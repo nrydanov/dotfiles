@@ -33,23 +33,33 @@ require("lazy").setup({
         -- Load custom plugins during startup (set to true for lazy-loading custom plugins)
         lazy = false,
         -- Always use the latest commit instead of versioning; adjust as needed.
-        version = false,
+        version = "*",
     },
     ui = {
         border = "rounded", -- Use rounded borders in the Lazy.nvim UI
     },
     performance = {
+        cache = {
+            enabled = true,    -- Включить кэширование для ускорения загрузки
+        },
+        reset_packpath = true, -- Сбросить packpath для чистоты
         rtp = {
+            reset = true,      -- Сбросить runtime path
+            paths = {},        -- Добавить дополнительные пути при необходимости
             disabled_plugins = {
                 "gzip",
-                -- Uncomment the plugins below if you do not use them:
-                -- "matchit",
-                -- "matchparen",
-                -- "netrwPlugin",
+                "matchit",
+                "matchparen",
                 "tarPlugin",
                 "tohtml",
                 "tutor",
                 "zipPlugin",
+                "rplugin", -- Отключить remote plugins если не используете
+                "synmenu",
+                "optwin",
+                "compiler",
+                "bugreport",
+                "ftplugin",
             },
         },
     },

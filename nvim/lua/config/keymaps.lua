@@ -19,6 +19,7 @@ vim.keymap.set("n", "<space>v", ":VenvSelect<CR>", { noremap = true, silent = tr
 vim.keymap.set("n", "<space>o", ":Telescope find_files<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<space>l", ":Telescope live_grep<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<space>w", ":Telescope lsp_dynamic_workspace_symbols<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<space>b", ":Telescope buffers<CR>", { desc = "Find buffers" })
 vim.keymap.set("n", "gd", ":Telescope lsp_definitions<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "gr", ":Telescope lsp_references<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<space>t", ":Telescope diagnostics<CR>", { noremap = true, silent = true })

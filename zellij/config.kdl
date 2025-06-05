@@ -277,6 +277,7 @@ simplified_ui false
 // also default to the scrollback size. This does nothing if `serialize_pane_viewport` is not true.
 //
 // scrollback_lines_to_serialize 10000
+scroll_buffer_size 1000
 
 // Define color themes for Zellij
 // For more examples, see: https://github.com/zellij-org/zellij/tree/main/example/themes

@@ -12,32 +12,18 @@ fi
 # 2. Source Zinit
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 
-# -------------------------------------------------
-# 3. Load Annexes for Extended Functionality
-#    (Using "light-mode" for minimal overhead)
-# -------------------------------------------------
-zinit light-mode for \
+zinit wait lucid light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust
+    zdharma-continuum/zinit-annex-rust \
+    joshskidmore/zsh-fzf-history-search \
+    MenkeTechnologies/zsh-cargo-completion
 
 # -------------------------------------------------
 # 4. Load Additional Plugins
 #    Use "light-mode for" to load multiple repos
 # -------------------------------------------------
 zinit light-mode for \
-    zsh-users/zsh-completions \
     marlonrichert/zsh-autocomplete \
     zsh-users/zsh-syntax-highlighting
-
-
-# zsh-fzf-history-search
-zinit ice lucid wait'0'
-zinit light joshskidmore/zsh-fzf-history-search
-# -------------------------------------------------
-
-
-# -------------------------------------------------
-# End of Zinit configuration
-# -------------------------------------------------

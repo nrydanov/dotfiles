@@ -3,7 +3,6 @@
 -- ============================================================================
 vim.opt.termguicolors = true -- Enable true color support
 vim.opt.background = "dark"  -- Use a dark background for better contrast
-vim.opt.syntax = "on"        -- Enable syntax highlighting
 
 -- ============================================================================
 -- Line Numbers & Cursor
@@ -26,6 +25,7 @@ vim.api.nvim_create_autocmd({ "InsertLeave" }, {
 vim.opt.ignorecase = true -- Ignore case in search patterns
 vim.opt.smartcase = true  -- Override ignorecase if uppercase is used
 vim.opt.incsearch = true  -- Show incremental search results
+vim.opt.hlsearch = true   -- Highlight search results
 
 -- ============================================================================
 -- Indentation & Tabs
@@ -76,15 +76,23 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 -- ============================================================================
 vim.g.instant_username = "nrydanov" -- Set username for the "instant" plugin (if used)
 
-
--- ============================================================================
--- File Backup, Swap, and Undo Settings
--- ============================================================================
-vim.opt.backup = false      -- Disable backup files (if using version control)
-vim.opt.writebackup = false -- Disable backup before overwriting files
-vim.opt.swapfile = false    -- Disable swap files (adjust if needed)
-vim.opt.undofile = true     -- Enable persistent undo
 vim.diagnostic.config({
-    virtual_text = true,
-
+    virtual_text = {
+        prefix = "●",
+        source = "if_many",
+    },
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = true,
+    float = {
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+    },
 })
+
+vim.opt.updatetime = 250 -- Fast refresh
+vim.opt.timeoutlen = 300 -- Fast timing response
+vim.opt.lazyredraw = true
