@@ -33,7 +33,7 @@ require("lazy").setup({
         -- Load custom plugins during startup (set to true for lazy-loading custom plugins)
         lazy = false,
         -- Always use the latest commit instead of versioning; adjust as needed.
-        version = "*",
+        version = nil,
     },
     ui = {
         border = "rounded", -- Use rounded borders in the Lazy.nvim UI
