@@ -1,5 +1,4 @@
 source ~/.config/dotfiles/zsh/zinit.zsh
-source ~/.config/dotfiles/zsh/autocompletion.zsh
 source ~/.config/dotfiles/zsh/aliases.zsh
 source ~/.config/dotfiles/zsh/bindkeys.zsh
 source ~/.config/dotfiles/zsh/colorscheme.zsh
