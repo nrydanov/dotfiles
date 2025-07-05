@@ -1,0 +1,1 @@
+return { "nrydanov/one-nvim" }
