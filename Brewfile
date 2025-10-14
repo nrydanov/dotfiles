@@ -1,3 +1,7 @@
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Apjanke's fork of the classic cowsay project
+brew "cowsay"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # Open source programming language to build simple/reliable/efficient software
@@ -14,6 +18,8 @@ brew "lua-language-server"
 brew "neovim"
 # Rust toolchain installer
 brew "rustup"
+# Internet file retriever
+brew "wget"
 # Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "zellij"
 # App to build and share containerised applications and microservices
