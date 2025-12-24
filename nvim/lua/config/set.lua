@@ -53,6 +53,8 @@ vim.opt.showmatch = true                 -- Highlight matching parentheses and b
 vim.opt.mat = 2                          -- Short delay (in tenths of a second) for matching bracket highlighting
 vim.opt.pumheight = 5                    -- Limit pop-up menu height to 5 items
 
+vim.opt.list = true
+vim.opt.listchars = { space = '·', tab = '» ', trail = '·' }
 -- Highlight soft line limits for readability
 vim.opt.colorcolumn = "80,100"
 
