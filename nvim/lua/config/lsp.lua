@@ -54,7 +54,14 @@ vim.lsp.config.lua_ls = {
         "selene.toml",
         "selene.yml",
         ".git",
-    }
+    },
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { "vim" },
+            },
+        },
+    },
 }
 
 vim.lsp.config.texlab = {
