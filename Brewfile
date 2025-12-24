@@ -1,44 +1,45 @@
-# GNU File, Shell, and Text utilities
 brew "coreutils"
-# Apjanke's fork of the classic cowsay project
 brew "cowsay"
-# Terminal JSON viewer
 brew "fx"
-# Command-line fuzzy finder written in Go
 brew "fzf"
-# Open source programming language to build simple/reliable/efficient software
+brew "git-filter-repo"
 brew "go"
-# Fast linters runner for Go
 brew "golangci-lint"
-# Language server for the Go language
 brew "gopls"
-# Kubernetes package manager
 brew "helm"
-# User-friendly cURL replacement (command-line HTTP client)
+brew "htop"
 brew "httpie"
-# Handy way to save and run project-specific commands
+brew "img2pdf"
 brew "just"
-# Kubernetes CLI To Manage Your Clusters In Style!
 brew "k9s"
-# Language Server for the Lua language
+brew "libpq"
 brew "lua-language-server"
-# Ambitious Vim-fork focused on extensibility and agility
+brew "minikube"
 brew "neovim"
-# Platform built on V8 to build network applications
 brew "node"
-# Search tool like grep and The Silver Searcher
+brew "python-setuptools"
+brew "qemu"
 brew "ripgrep"
-# Rust toolchain installer
+brew "rlwrap"
 brew "rustup"
-# Markup-based typesetting system
+brew "sbcl"
+brew "sbt"
+brew "socket_vmnet"
+brew "tldr"
 brew "typst"
-# Internet file retriever
+brew "uv"
+brew "websocat"
 brew "wget"
-# Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "zellij"
-# App to build and share containerised applications and microservices
+brew "zuban"
 cask "docker-desktop"
 cask "font-fira-code"
-# GPU-based terminal emulator
 cask "kitty"
+cask "smlnj"
+cask "temurin@25"
 go "github.com/air-verse/air"
+go "github.com/stilyanpetrovv/pdf-to-jpg"
+go "github.com/google/pprof"
+cargo "cargo-leptos"
+cargo "picodata-pike"
+cargo "protols"
