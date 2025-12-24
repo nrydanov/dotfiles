@@ -26,13 +26,11 @@ zinit light-mode for \
 # 4. Load Additional Plugins
 #    Use "light-mode for" to load multiple repos
 # -------------------------------------------------
-zinit light-mode for \
-    marlonrichert/zsh-autocomplete \
-    zsh-users/zsh-syntax-highlighting
+zinit light-mode for zsh-users/zsh-syntax-highlighting
 
 
 # zsh-fzf-history-search
-zinit ice lucid wait'0'
+zinit ice lucid wait '0'
 zinit light joshskidmore/zsh-fzf-history-search
 # -------------------------------------------------
 
