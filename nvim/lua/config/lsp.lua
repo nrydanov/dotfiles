@@ -103,11 +103,10 @@ vim.lsp.config.pyright = {
     },
 }
 
--- vim.lsp.config.pyrefly = {
---     cmd = { "pyrefly", "lsp" },
--- }
-
-
+vim.lsp.config.zuban = {
+    cmd = { "zuban", "server" },
+    filetypes = { "python" },
+}
 
 -- Enable all language servers
 vim.lsp.enable({
@@ -120,7 +119,6 @@ vim.lsp.enable({
     "ts_ls",
     "millet",
     "ty",
-    "pyright",
+    "zuban",
     "pylsp",
-    -- "pyrefly"
 })
