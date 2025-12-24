@@ -1,5 +1,6 @@
 setopt PROMPT_SUBST
-COLORS_FILE=~/.config/.nvimcolors
+COLOR_MODE="${COLOR_MODE:-dark}"
+COLORS_FILE=~/.config/dotfiles/kitty/${COLOR_MODE}.conf
 
 # Sync vim colorscheme with terminal.
 # Note: TermcolorsShow plugin is required for this to work
@@ -11,11 +12,11 @@ fi
 if [ "$(uname)" = "Darwin" ]; then
     if [ "${COLOR_MODE:-}" = "light" ]; then
         # Light
-        USER_COLOR=color8
+        USER_COLOR=color3
         USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-        VCS_COLOR=color8
+        VCS_COLOR=color4
         VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
-        HOST_COLOR=color8
+        HOST_COLOR=color3
         HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
         BACKGROUND_COLOR=inactive_tab_background
         BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)

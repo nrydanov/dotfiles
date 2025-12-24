@@ -1,11 +1,13 @@
--- Dark
-vim.cmd.colorscheme('one-nvim')
--- Light
--- vim.cmd.colorscheme('onehalflight')
--- Comments next line if you generate config for Kitty
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
+local mode = (vim.env.COLOR_MODE or ""):lower()  -- env var -> string [web:2]
 
--- NOTE(nrydanov) Temporary treesitter fix
-vim.api.nvim_set_hl(0, "@variable", { fg = "#e5c07b" })
+local ok
+if mode == "light" then
+  vim.o.background = "light"
+  ok = pcall(vim.cmd.colorscheme, "onelight")
+else
+  vim.o.background = "dark"
+  ok = pcall(vim.cmd.colorscheme, "onedark")
+end
+if not ok then
+  vim.notify("Error setting up Neovim theme", vim.log.levels.ERROR) -- msg должен быть string [web:2]
+end
