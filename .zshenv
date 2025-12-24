@@ -9,10 +9,12 @@ export HOMEBREW_PREFIX="/opt/homebrew"
 
 . ~/.config/dotfiles/.secrets
 
+
 typeset -U path
 path=(
     $HOME/bin
     $HOME/go/bin
+    $HOME/.cargo/bin
     $path
 )
 
