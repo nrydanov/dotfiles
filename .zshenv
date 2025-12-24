@@ -7,6 +7,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export HOMEBREW_PREFIX="/opt/homebrew"
 
+. ~/.config/dotfiles/.secrets
 
 typeset -U path
 path=(
