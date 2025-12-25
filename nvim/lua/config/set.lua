@@ -61,8 +61,24 @@ vim.opt.colorcolumn = "80,100"
 -- ============================================================================
 -- Clipboard & Filetype Settings
 -- ============================================================================
-vim.opt.clipboard = "unnamedplus"    -- Use system clipboard for yank, delete, change, and put
 vim.cmd('filetype plugin indent on') -- Enable filetype detection, plugins, and indenting
+
+if vim.env.SSH_TTY ~= nil then
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+      ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
+  }
+  vim.opt.clipboard:append('unnamedplus')
+end
+
+
 
 -- ============================================================================
 -- Auto Commands
