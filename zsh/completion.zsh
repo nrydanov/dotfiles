@@ -44,3 +44,6 @@ unsetopt pathdirs
 
 # Zsh autosuggestions configuration (if using the plugin)
 export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+
+autoload -Uz compinit
+compinit
