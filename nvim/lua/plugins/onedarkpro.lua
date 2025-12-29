@@ -57,6 +57,9 @@ return {
                 ["@function.builtin"] = {
                     link = "@function"
                 },
+                ["@variable.parameter"] = {
+                    link = "@variable"
+                },
             }
 
         }
