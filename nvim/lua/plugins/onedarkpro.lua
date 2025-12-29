@@ -9,6 +9,10 @@ return {
             options = {
                 transparency = true, -- Use a transparent background?
             },
+            colors = {
+                dark_yellow = "#fffab4",
+                dark_green = "#7b7410",
+            },
             highlights = {
                 --- Brackets
                 Brackets = {
@@ -38,7 +42,14 @@ return {
                 },
                 ["@lsp.type.enumMember"] = {
                     fg = colors.green
-                }
+                },
+                --- Comments
+                ["@comment.documentation"] = {
+                    bg = "${dark_yellow}",
+                    fg = "${dark_green}",
+                    bold = true,
+                    italic = true,
+                },
                 --- Literals, Variables and functions
                 ["@variable.builtin"] = {
                     link = "@variable"
