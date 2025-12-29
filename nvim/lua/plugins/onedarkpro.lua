@@ -48,7 +48,6 @@ return {
                     bg = "${dark_yellow}",
                     fg = "${dark_green}",
                     bold = true,
-                    italic = true,
                 },
                 --- Literals, Variables and functions
                 ["@variable.builtin"] = {
@@ -60,6 +59,9 @@ return {
                 ["@variable.parameter"] = {
                     link = "@variable"
                 },
+                ["@lsp.type.macro.rust"] = {
+                    link = "@function"
+                }
             }
 
         }
