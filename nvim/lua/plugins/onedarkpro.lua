@@ -10,6 +10,20 @@ return {
                 transparency = true, -- Use a transparent background?
             },
             highlights = {
+                --- Brackets
+                Brackets = {
+                    link = "Normal",
+                },
+                ["@punctuation.bracket.rust"] = {
+                    link = "Brackets",
+                },
+                ["@odp.punctuation_arguments_brackets.rust"] = {
+                    link = "Brackets",
+                },
+                ["@odp.punctuation_token_bracket.rust"] = {
+                    link = "Brackets",
+                },
+                --- Misc
                 CursorLineNr = {
                     fg = colors.blue
                 },
@@ -25,6 +39,13 @@ return {
                 ["@lsp.type.enumMember"] = {
                     fg = colors.green
                 }
+                --- Literals, Variables and functions
+                ["@variable.builtin"] = {
+                    link = "@variable"
+                },
+                ["@function.builtin"] = {
+                    link = "@function"
+                },
             }
 
         }
