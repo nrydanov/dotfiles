@@ -61,6 +61,9 @@ return {
                 },
                 ["@lsp.type.macro.rust"] = {
                     link = "@function"
+                },
+                ["@variable.go"] = {
+                    fg = colors.white
                 }
             }
 

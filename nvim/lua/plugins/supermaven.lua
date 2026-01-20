@@ -10,7 +10,7 @@ return {
         log_level = "info",                -- set to "off" to disable logging completely
         disable_keymaps = false,           -- disables built-in keymaps for more manual control
         condition = function()
-            return false
+            return true
         end, -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
     },
     install = function()
