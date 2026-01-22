@@ -1,17 +1,27 @@
 # This is Git's per-user configuration file.
 [user]
-    signingkey = find.art.in.living@gmail.com
     email = find.art.in.living@gmail.com
-    name = Nikita Rydanov
 [commit]
-	gpgsign = true
+ ; gpgsign = true
 [gpg]
-	program = gpg
+    program = gpg
 [push]
-	autoSetupRemote = true
+    autoSetupRemote = true
 [pull]
-	rebase = true
+    rebase = true
 [alias]
     ch = "!fn() { git branch | fzf | xargs git checkout;}; fn"
     s = status
     c = commit
+[filter "lfs"]
+    required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+[init]
+    defaultBranch = main
+[rerere]
+    enabled = true
+    autoupdate = true
+[url "git@github.com:"]
+    insteadOf = https://github.com/
