@@ -1,115 +1,78 @@
 -- ============================================================================
--- General Appearance & Behavior
+-- Core Interface & Behavior (Neovim 0.11+)
 -- ============================================================================
-vim.opt.termguicolors = true -- Enable true color support
-vim.opt.background = "dark"  -- Use a dark background for better contrast
+vim.opt.termguicolors = true      -- Enable 24-bit RGB color
+vim.opt.background = "dark"
+vim.opt.mouse = "a"               -- Allow mouse usage in all modes
 
--- ============================================================================
--- Line Numbers & Cursor
--- ============================================================================
-vim.opt.nu = true             -- Show absolute line numbers
-vim.opt.relativenumber = true -- Show relative line numbers
-vim.opt.cursorline = true     -- Highlight the current line
+-- Timing (Critical for Leader Key & Responsiveness)
+vim.opt.timeoutlen = 500          -- Wait 500ms for mapped sequences (Leader key)
+vim.opt.updatetime = 200          -- Faster diagnostics and swap file write
 
--- Autocmds to toggle relative numbers when entering/leaving Insert mode
-vim.api.nvim_create_autocmd({ "InsertEnter" }, {
-    callback = function() vim.opt.relativenumber = false end,
-})
-vim.api.nvim_create_autocmd({ "InsertLeave" }, {
-    callback = function() vim.opt.relativenumber = true end,
-})
+-- Line Numbers & Scrolling
+vim.opt.number = true             -- Show absolute line numbers
+vim.opt.relativenumber = true     -- Show relative line numbers for fast jumps
+vim.opt.cursorline = true         -- Highlight the current line
+vim.opt.scrolloff = 10            -- Keep cursor centered (10 lines of padding)
+vim.opt.smoothscroll = true       -- Smooth scrolling for wrapped lines
 
--- ============================================================================
 -- Search Settings
--- ============================================================================
-vim.opt.ignorecase = true -- Ignore case in search patterns
-vim.opt.smartcase = true  -- Override ignorecase if uppercase is used
-vim.opt.incsearch = true  -- Show incremental search results
-vim.opt.hlsearch = true   -- Highlight search results
+vim.opt.ignorecase = true         -- Case-insensitive search
+vim.opt.smartcase = true          -- Case-sensitive if capital letter is used
+vim.opt.hlsearch = true           -- Highlight all search matches
 
 -- ============================================================================
--- Indentation & Tabs
+-- Indentation & Formatting (Treesitter-friendly)
 -- ============================================================================
-vim.opt.tabstop = 4        -- Number of spaces that a tab counts for
-vim.opt.softtabstop = 4    -- Number of spaces inserted for a soft tab
-vim.opt.shiftwidth = 4     -- Spaces per indentation level
-vim.opt.expandtab = true   -- Use spaces instead of tabs
-vim.opt.autoindent = true  -- Maintain indentation from previous line
-vim.opt.smartindent = true -- Insert indents automatically in some cases
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true          -- Convert tabs to spaces
+vim.opt.autoindent = true         -- Copy indent from current line when starting a new one
+-- smartindent REMOVED: Treesitter handles complex indentation better natively
 
 -- ============================================================================
--- Undo, Swap & Backup Files
+-- System & File Persistence
 -- ============================================================================
-vim.opt.undofile = true  -- Persist undo history across sessions
-vim.opt.swapfile = false -- Disable swap files to avoid clutter
-vim.opt.backup = false   -- Disable backup files if using version control
+vim.opt.undofile = true           -- Save undo history to a file
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.clipboard = "unnamedplus" -- Native OSC 52 support (0.10+) for SSH/Local
 
 -- ============================================================================
--- Editor UI Extras
+-- UI Refinements
 -- ============================================================================
-vim.opt.signcolumn = "yes"               -- Always show the sign column to avoid shifting
-vim.opt.completeopt = "menuone,noselect" -- Better completion: show menu even for one item and don't auto-select
-vim.opt.showmatch = true                 -- Highlight matching parentheses and brackets
-vim.opt.mat = 2                          -- Short delay (in tenths of a second) for matching bracket highlighting
-vim.opt.pumheight = 5                    -- Limit pop-up menu height to 5 items
+vim.opt.signcolumn = "yes"        -- Always show signcolumn to prevent text shifting
+vim.opt.laststatus = 3            -- Global statusline (one for all windows)
+vim.opt.pumheight = 12            -- Pop-up menu height
+vim.opt.splitright = true         -- Vertical splits open to the right
+vim.opt.splitbelow = true         -- Horizontal splits open below
 
+-- Visual Whitespace (Clean look)
 vim.opt.list = true
-vim.opt.listchars = { space = '·', tab = '» ', trail = '·' }
--- Highlight soft line limits for readability
-vim.opt.colorcolumn = "80,100"
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+-- Space characters REMOVED in favor of Snacks.indent lines
 
 -- ============================================================================
--- Clipboard & Filetype Settings
+-- Auto-commands (Modern Lua API)
 -- ============================================================================
-vim.cmd('filetype plugin indent on') -- Enable filetype detection, plugins, and indenting
+local augroup = vim.api.nvim_create_augroup("CustomSettings", { clear = true })
 
-if vim.env.SSH_TTY ~= nil then
-  vim.g.clipboard = {
-    name = 'OSC 52',
-    copy = {
-      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-    },
-    paste = {
-      ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-      ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-    },
-  }
-end
-vim.opt.clipboard:append('unnamedplus')
-
-
-
--- ============================================================================
--- Auto Commands
--- ============================================================================
--- Automatically remove trailing whitespace on save
+-- Trim trailing whitespace on save without moving the cursor
 vim.api.nvim_create_autocmd("BufWritePre", {
+    group = augroup,
     pattern = "*",
-    command = [[%s/\s\+$//e]],
+    callback = function()
+        local save = vim.fn.winsaveview()
+        vim.cmd([[keepjumps keeppatterns %s/\s\+$//e]])
+        vim.fn.winrestview(save)
+    end,
 })
 
--- ============================================================================
--- Plugin-Specific Settings
--- ============================================================================
-vim.g.instant_username = "nrydanov" -- Set username for the "instant" plugin (if used)
-
-vim.diagnostic.config({
-    virtual_text = {
-        prefix = "●",
-        source = "if_many",
-    },
-    signs = true,
-    underline = true,
-    update_in_insert = false,
-    severity_sort = true,
-    float = {
-        border = "rounded",
-        source = "always",
-        header = "",
-        prefix = "",
-    },
+-- Highlight text on yank (copy) - very helpful feedback
+vim.api.nvim_create_autocmd("TextYankPost", {
+    group = augroup,
+    callback = function()
+        vim.highlight.on_yank({ higroup = "Visual", timeout = 150 })
+    end,
 })
-
-vim.opt.updatetime = 250 -- Fast refresh
-vim.opt.timeoutlen = 300 -- Fast timing response

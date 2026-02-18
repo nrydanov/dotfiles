@@ -1,9 +1,10 @@
+vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 -- ============================================================================
 -- Global Key Mappings
 -- ============================================================================
 -- File Explorer and Diagnostics
-vim.keymap.set("n", "<space>d", ":NvimTreeToggle<CR>", { noremap = true, silent = true }) -- Toggle file explorer
-vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>d", function() Snacks.explorer() end, { desc = "Toggle Explorer" })
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open Diagnostic Float" })
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { noremap = true, silent = true })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { noremap = true, silent = true })
 
@@ -15,14 +16,13 @@ vim.keymap.set("n", "S", "0", { remap = true, silent = true }) -- Jump to beginn
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
 
 -- Other global mappings
-vim.keymap.set("n", "<space>v", ":VenvSelect<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<space>o", ":Telescope find_files<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<space>l", ":Telescope live_grep<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<space>w", ":Telescope lsp_dynamic_workspace_symbols<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<space>b", ":Telescope buffers<CR>", { desc = "Find buffers" })
-vim.keymap.set("n", "gd", ":Telescope lsp_definitions<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "gr", ":Telescope lsp_references<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<space>t", ":Telescope diagnostics<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>o", function() Snacks.picker.files() end, { desc = "Find Files" })
+vim.keymap.set("n", "<leader>l", function() Snacks.picker.grep() end, { desc = "Live Grep" })
+vim.keymap.set("n", "<leader>w", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Workspace Symbols" })
+vim.keymap.set("n", "<leader>b", function() Snacks.picker.buffers() end, { desc = "Find Buffers" })
+vim.keymap.set("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to Definition" })
+vim.keymap.set("n", "gr", function() Snacks.picker.lsp_references() end, { desc = "LSP References" })
+vim.keymap.set("n", "<leader>t", function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
 
 -- Remap 'I' to 'i' (override default behavior; review if this is desired)
 vim.keymap.set("n", "I", "i", { noremap = true, silent = true })
@@ -34,26 +34,22 @@ vim.keymap.set("n", "I", "i", { noremap = true, silent = true })
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
     callback = function(ev)
-        -- Enable omni-completion (<c-x><c-o>)
-        vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+        -- Signature Help
+        vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help,
+            { buffer = ev.buf, desc = "LSP: Signature Help" })
 
-        local opts = { buffer = ev.buf, noremap = true, silent = true }
-        vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-        vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-        vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-        vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
-        vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
-        vim.keymap.set("n", "<space>wl", function()
-            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, opts)
-        vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
-        vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
-        vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
-        vim.keymap.set({ "n", "v" }, "<space>f", function()
-            vim.lsp.buf.format({ async = true, remap = false })
-        end, opts)
+        -- Rename
+        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename,
+            { buffer = ev.buf, desc = "LSP: Rename" })
+
+        -- Code Actions (using Snacks picker)
+        vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action,
+            { buffer = ev.buf, desc = "LSP: Code Actions" })
+
+        -- Format
+        vim.keymap.set("n", "<leader>f", function()
+            vim.lsp.buf.format({ async = true })
+        end, { buffer = ev.buf, desc = "LSP: Format File" })
     end,
 })
 
