@@ -39,7 +39,22 @@ vim.lsp.config.intelephense = {
 vim.lsp.config.rust_analyzer = {
     cmd = { "rust-analyzer" },
     filetypes = { "rust" },
-    root_markers = { "Cargo.toml", ".git" }
+    root_markers = { "Cargo.toml", ".git" },
+    settings = {
+        ['rust-analyzer'] = {
+            check = {
+                command = "clippy"
+            },
+            diagnostics = {
+                experimental = {
+                    enable = true -- экспериментальные диагностики
+                }
+            },
+            files = {
+                watcher = "server"
+            },
+        }
+    }
 }
 
 vim.lsp.config.lua_ls = {
