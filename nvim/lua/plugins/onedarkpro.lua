@@ -64,7 +64,12 @@ return {
                 },
                 ["@variable.go"] = {
                     fg = colors.white
-                }
+                },
+                --- Inlay hints
+                LspInlayHint = {
+                    fg = colors.gray,
+                    italic = true,
+                },
             }
 
         }

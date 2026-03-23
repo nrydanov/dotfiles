@@ -46,12 +46,32 @@ vim.lsp.config.rust_analyzer = {
                 command = "clippy"
             },
             diagnostics = {
-                experimental = {
-                    enable = true -- экспериментальные диагностики
-                }
+                experimental = { enable = true }
             },
             files = {
-                watcher = "server"
+                watcher = "client"
+            },
+            procMacro = {
+                enable = true,
+                attributes = { enable = true },
+            },
+            cargo = {
+                buildScripts = { enable = true },
+            },
+            inlayHints = {
+                bindingModeHints = { enable = true },
+                chainingHints = { enable = true },
+                closureReturnTypeHints = { enable = "always" },
+                parameterHints = { enable = true },
+                typeHints = { enable = true },
+                lifetimeElisionHints = { enable = "skip_trivial" },
+            },
+            completion = {
+                autoimport = { enable = true },
+            },
+            imports = {
+                granularity = { group = "module" },
+                prefix = "self",
             },
         }
     }

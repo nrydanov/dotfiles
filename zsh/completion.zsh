@@ -25,14 +25,24 @@ zstyle ':autocomplete:*' min-delay 1.0  # float
 zstyle ':autocomplete:*' min-input 3
 zstyle ':autocomplete:async' enabled no
 
-zmodload -i zsh/complist
+# 1. Load the menu module
+zmodload zsh/complist
 
-bindkey              '^I' menu-select
-bindkey -M menuselect              '^I'         menu-complete
-bindkey -M menuselect "$terminfo[kcbt]" reverse-menu-complete
-bindkey -M menuselect  '^[[D' .backward-char  '^[OD' .backward-char
-bindkey -M menuselect  '^[[C'  .forward-char  '^[OC'  .forward-char
+# 2. Enable the menu
+zstyle ':completion:*' menu select
 
+# 3. Essential: Adds the slash after the directory name
+setopt AUTO_PARAM_SLASH
+
+# 4. The Fix for Enter:
+# 'send-break' exits the menu immediately and drops you back to the prompt.
+# It prevents the "auto-dive" behavior you are seeing.
+bindkey -M menuselect '^M' accept-search
+
+# 5. Tab behavior:
+# Just moves the highlight to the next item without entering it.
+bindkey -M menuselect '^I' menu-complete
+bindkey -M menuselect '^[[Z' reverse-menu-complete
 
 # History settings
 HISTFILE="$HOME/.zhistory"

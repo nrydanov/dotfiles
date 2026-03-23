@@ -1,3 +1,8 @@
+
+export https_proxy=http://127.0.0.1:8001
+export http_proxy=http://127.0.0.1:8001
+export all_proxy=socks5://127.0.0.1:8001
+
 source ~/.config/dotfiles/zsh/zinit.zsh
 source ~/.config/dotfiles/zsh/aliases.zsh
 source ~/.config/dotfiles/zsh/bindkeys.zsh
@@ -9,3 +14,4 @@ source ~/.config/dotfiles/zsh/completion.zsh
 
 # Prompt format string
 PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@%m %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
+export PATH="$HOME/.local/bin:$PATH"

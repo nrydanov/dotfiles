@@ -7,8 +7,9 @@
     program = gpg
 [push]
     autoSetupRemote = true
-[branch]
-	autoSetupMerge = always
+    default = current
+[fetch]
+    prune = true
 [pull]
     rebase = true
 [alias]
