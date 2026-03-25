@@ -24,7 +24,7 @@ vim.keymap.set("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc
 vim.keymap.set("n", "gr", function() Snacks.picker.lsp_references({ regex = true }) end, { desc = "LSP References" })
 vim.keymap.set("n", "gy", function() Snacks.picker.lsp_type_definitions({ regex = true }) end, { desc = "LSP References" })
 vim.keymap.set("n", "gi", function() Snacks.picker.lsp_implementations({ regex = true }) end, { desc = "LSP References" })
-vim.keymap.set("n", "<leader>t", function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
+vim.keymap.set("n", "<leader>x", function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
 
 -- Remap 'I' to 'i' (override default behavior; review if this is desired)
 vim.keymap.set("n", "I", "i", { noremap = true, silent = true })

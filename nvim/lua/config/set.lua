@@ -37,7 +37,23 @@ vim.opt.autoindent = true         -- Copy indent from current line when starting
 vim.opt.undofile = true           -- Save undo history to a file
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.clipboard = "unnamedplus" -- Native OSC 52 support (0.10+) for SSH/Local
+if os.getenv("SSH_TTY") then
+    -- Over SSH: use OSC 52 to copy to host clipboard through zellij
+    local osc52 = require("vim.ui.clipboard.osc52")
+    vim.g.clipboard = {
+        name = "OSC 52",
+        copy = {
+            ["+"] = osc52.copy("+"),
+            ["*"] = osc52.copy("*"),
+        },
+        paste = {
+            ["+"] = osc52.paste("+"),
+            ["*"] = osc52.paste("*"),
+        },
+    }
+else
+    vim.opt.clipboard = "unnamedplus"
+end
 
 -- ============================================================================
 -- UI Refinements
