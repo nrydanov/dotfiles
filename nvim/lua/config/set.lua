@@ -51,9 +51,8 @@ if os.getenv("SSH_TTY") then
             ["*"] = osc52.paste("*"),
         },
     }
-else
-    vim.opt.clipboard = "unnamedplus"
 end
+vim.opt.clipboard = "unnamedplus"
 
 -- ============================================================================
 -- UI Refinements
