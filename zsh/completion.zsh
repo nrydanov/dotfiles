@@ -1,59 +1,47 @@
-# Additional completions
-if [ ! -d ${XDG_DATA_HOME}/zsh/completions ]; then
-    mkdir -p ${XDG_DATA_HOME}/zsh/completions
-    kubectl completion zsh > ${XDG_DATA_HOME}/zsh/completions/_kubectl
-    just --completions zsh > ${XDG_DATA_HOME}/zsh/completions/_just
-    docker completion zsh > ${XDG_DATA_HOME}/zsh/completions/_docker
-    minikube completion zsh > ${XDG_DATA_HOME}/zsh/completions/_minikube
-    zellij setup --generate-completion zsh > ${XDG_DATA_HOME}/zsh/completions/_zellij
-    rustup completions zsh > ${XDG_DATA_HOME}/zsh/completions/_rustup
-fi
+# --- Tool completions (generated per-file) ---
+mkdir -p ${XDG_DATA_HOME}/zsh/completions
+_comp_dir=${XDG_DATA_HOME}/zsh/completions
+[ ! -f $_comp_dir/_kubectl  ] && kubectl completion zsh                      > $_comp_dir/_kubectl
+[ ! -f $_comp_dir/_just     ] && just --completions zsh                      > $_comp_dir/_just
+[ ! -f $_comp_dir/_docker   ] && docker completion zsh                       > $_comp_dir/_docker
+[ ! -f $_comp_dir/_minikube ] && minikube completion zsh                     > $_comp_dir/_minikube
+[ ! -f $_comp_dir/_zellij   ] && zellij setup --generate-completion zsh      > $_comp_dir/_zellij
+[ ! -f $_comp_dir/_rustup   ] && rustup completions zsh                      > $_comp_dir/_rustup
+unset _comp_dir
 
 fpath+=${XDG_DATA_HOME}/zsh/completions
+[[ "$(uname)" == "Darwin" ]] && fpath+=$(brew --prefix)/share/zsh/site-functions
 
-if [ "$(uname)" = "Darwin" ]; then
-    fpath+=$(brew --prefix)/share/zsh/site-functions
-fi
-
-LISTMAX=-1
-# Enable completion caching
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
-
-zstyle ':completion:*:default' list-colors "${LS_COLORS}"
-zstyle ':autocomplete:*' min-delay 1.0  # float
-zstyle ':autocomplete:*' min-input 3
-zstyle ':autocomplete:async' enabled no
-
-# 1. Load the menu module
+# --- Load complist before compinit (required for menuselect) ---
 zmodload zsh/complist
-
-# 2. Enable the menu
-zstyle ':completion:*' menu select
-
-# 3. Essential: Adds the slash after the directory name
-setopt AUTO_PARAM_SLASH
-
-# 4. The Fix for Enter:
-# 'send-break' exits the menu immediately and drops you back to the prompt.
-# It prevents the "auto-dive" behavior you are seeing.
-bindkey -M menuselect '^M' accept-search
-
-# 5. Tab behavior:
-# Just moves the highlight to the next item without entering it.
-bindkey -M menuselect '^I' menu-complete
-bindkey -M menuselect '^[[Z' reverse-menu-complete
-
-# History settings
-HISTFILE="$HOME/.zhistory"
-SAVEHIST=10000
-HISTSIZE=9999
-
-setopt SHARE_HISTORY HIST_EXPIRE_DUPS_FIRST PROMPT_SUBST HIST_IGNORE_ALL_DUPS
-unsetopt pathdirs
-
-# Zsh autosuggestions configuration (if using the plugin)
-export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
 
 autoload -Uz compinit
 compinit
+
+# --- Completion behavior ---
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
+zstyle ':completion:*' menu select
+zstyle ':completion:*:default' list-colors "${LS_COLORS}"
+
+setopt AUTO_PARAM_SLASH
+LISTMAX=0
+
+# --- Menuselect keybindings ---
+bindkey -M menuselect '^I'    menu-complete          # Tab: next candidate
+bindkey -M menuselect '^[[Z'  reverse-menu-complete  # Shift-Tab: prev candidate
+bindkey -M menuselect '^M'    accept-line            # Enter: accept
+bindkey -M menuselect '^[[D'  send-break             # Left: exit menu
+bindkey -M menuselect '^[[C'  send-break             # Right: exit menu
+
+# --- History ---
+HISTFILE="$HOME/.zhistory"
+SAVEHIST=10000
+HISTSIZE=9999
+setopt SHARE_HISTORY HIST_EXPIRE_DUPS_FIRST PROMPT_SUBST HIST_IGNORE_ALL_DUPS
+unsetopt pathdirs
+
+# --- Autosuggestions ---
+export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
