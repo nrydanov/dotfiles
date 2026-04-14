@@ -17,12 +17,15 @@ vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
 
 -- Other global mappings
 vim.keymap.set("n", "<leader>o", function() Snacks.picker.files() end, { desc = "Find Files" })
+vim.keymap.set("n", "<leader>re", function() Snacks.picker.resume() end, { desc = "Resume picking" })
 vim.keymap.set("n", "<leader>l", function() Snacks.picker.grep({ regex = true }) end, { desc = "Live Grep" })
 vim.keymap.set("n", "<leader>w", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Workspace Symbols" })
 vim.keymap.set("n", "<leader>b", function() Snacks.picker.buffers() end, { desc = "Find Buffers" })
+vim.keymap.set("n", "<leader>m", function() Snacks.picker.marks() end, { desc = "Find Buffers" })
 vim.keymap.set("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to Definition" })
 vim.keymap.set("n", "gr", function() Snacks.picker.lsp_references({ regex = true }) end, { desc = "LSP References" })
-vim.keymap.set("n", "gy", function() Snacks.picker.lsp_type_definitions({ regex = true }) end, { desc = "LSP References" })
+vim.keymap.set("n", "gy", function() Snacks.picker.lsp_type_definitions({ regex = true }) end,
+    { desc = "LSP References" })
 vim.keymap.set("n", "gi", function() Snacks.picker.lsp_implementations({ regex = true }) end, { desc = "LSP References" })
 vim.keymap.set("n", "<leader>x", function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
 
