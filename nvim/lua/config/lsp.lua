@@ -1,6 +1,6 @@
 -- Configure language servers using vim.lsp.config
 vim.lsp.config.clangd = {
-    cmd = { "clangd" },
+    cmd = { "clangd", "--log=error" },
     filetypes = { "c", "cpp", "objc", "objcpp" },
     root_markers = {
         "compile_commands.json",
