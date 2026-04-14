@@ -28,6 +28,7 @@ zstyle ':completion:*:default' list-colors "${LS_COLORS}"
 
 setopt AUTO_PARAM_SLASH
 LISTMAX=0
+unsetopt pathdirs
 
 # --- Menuselect keybindings ---
 bindkey -M menuselect '^I'    menu-complete          # Tab: next candidate
@@ -35,13 +36,3 @@ bindkey -M menuselect '^[[Z'  reverse-menu-complete  # Shift-Tab: prev candidate
 bindkey -M menuselect '^M'    accept-line            # Enter: accept
 bindkey -M menuselect '^[[D'  send-break             # Left: exit menu
 bindkey -M menuselect '^[[C'  send-break             # Right: exit menu
-
-# --- History ---
-HISTFILE="$HOME/.zhistory"
-SAVEHIST=10000
-HISTSIZE=9999
-setopt SHARE_HISTORY HIST_EXPIRE_DUPS_FIRST PROMPT_SUBST HIST_IGNORE_ALL_DUPS
-unsetopt pathdirs
-
-# --- Autosuggestions ---
-export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
