@@ -13,7 +13,4 @@ return {
             return true
         end, -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
     },
-    install = function()
-        vim.cmd('COQdeps')
-    end
 }

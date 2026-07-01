@@ -91,11 +91,3 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         vim.highlight.on_yank({ higroup = "Visual", timeout = 150 })
     end,
 })
-
--- Enable inlay hints when LSP attaches
-vim.api.nvim_create_autocmd("LspAttach", {
-    group = augroup,
-    callback = function(ev)
-        vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-    end,
-})

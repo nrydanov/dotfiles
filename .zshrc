@@ -10,3 +10,13 @@ source ~/.config/dotfiles/zsh/completion.zsh
 
 # Prompt format string
 PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@%m %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
+
+# bun completions
+[ -s "/Users/find.art.in.living/.bun/_bun" ] && source "/Users/find.art.in.living/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+export PATH="$HOME/.local/bin:$PATH"

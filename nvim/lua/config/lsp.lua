@@ -36,47 +36,6 @@ vim.lsp.config.intelephense = {
     root_markers = { "composer.json", ".git" }
 }
 
-vim.lsp.config.rust_analyzer = {
-    cmd = { "rust-analyzer" },
-    filetypes = { "rust" },
-    root_markers = { "Cargo.toml", ".git" },
-    settings = {
-        ['rust-analyzer'] = {
-            check = {
-                command = "clippy"
-            },
-            diagnostics = {
-                experimental = { enable = true }
-            },
-            files = {
-                watcher = "client"
-            },
-            procMacro = {
-                enable = true,
-                attributes = { enable = true },
-            },
-            cargo = {
-                buildScripts = { enable = true },
-            },
-            inlayHints = {
-                bindingModeHints = { enable = true },
-                chainingHints = { enable = true },
-                closureReturnTypeHints = { enable = "always" },
-                parameterHints = { enable = true },
-                typeHints = { enable = true },
-                lifetimeElisionHints = { enable = "skip_trivial" },
-            },
-            completion = {
-                autoimport = { enable = true },
-            },
-            imports = {
-                granularity = { group = "module" },
-                prefix = "self",
-            },
-        }
-    }
-}
-
 vim.lsp.config.lua_ls = {
     cmd = { "lua-language-server" },
     filetypes = { "lua" },
@@ -117,12 +76,6 @@ vim.lsp.config.millet = {
     root_markers = { ".git" }
 }
 
-vim.lsp.config.ty = {
-    cmd = { "ty" },
-    filetypes = { "ty" },
-    root_markers = { ".git" }
-}
-
 vim.lsp.config.pyrefly = {
     cmd = "pyrefly",
     filetypes = "py",
@@ -139,12 +92,9 @@ vim.lsp.enable({
     "clangd",
     "gopls",
     "intelephense",
-    "rust_analyzer",
     "lua_ls",
     "texlab",
     "ts_ls",
     "millet",
-    "ty",
     "zuban",
-    "pylsp",
 })
