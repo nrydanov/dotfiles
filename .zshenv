@@ -1,4 +1,4 @@
-. ~/.config/dotfiles/.secrets
+[ -f ~/.config/dotfiles/.secrets ] && . ~/.config/dotfiles/.secrets
 
 export LANG="en_US.UTF-8"
 export EDITOR="nvim"

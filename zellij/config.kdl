@@ -3,7 +3,7 @@
 
 
 themes {
-    default {
+    dark {
         fg "#4b5262"
         bg "#000000"
         black "#1e2127"
@@ -15,8 +15,138 @@ themes {
         cyan "#56b6c2"
         white "#61afef"
         orange "#e5c07b"
+
+        // The built-in status-bar's keybinding-hint pills don't derive their
+        // colors from the roles above — they read this separate, more
+        // detailed component schema. Set explicitly so they stay legible.
+        ribbon_unselected {
+            base 152 195 121
+            background 30 33 39
+            emphasis_0 97 175 239
+            emphasis_1 152 195 121
+            emphasis_2 229 192 123
+            emphasis_3 198 120 221
+        }
+        ribbon_selected {
+            base 30 33 39
+            background 97 175 239
+            emphasis_0 152 195 121
+            emphasis_1 229 192 123
+            emphasis_2 198 120 221
+            emphasis_3 86 182 194
+        }
+        // Fills the rest of the status-bar row (anywhere not covered by a
+        // ribbon) — without this it defaults to a dark filler regardless
+        // of theme.
+        text_unselected {
+            base 75 82 98
+            background 0 0 0
+            emphasis_0 97 175 239
+            emphasis_1 152 195 121
+            emphasis_2 229 192 123
+            emphasis_3 198 120 221
+        }
+        text_selected {
+            base 30 33 39
+            background 97 175 239
+            emphasis_0 152 195 121
+            emphasis_1 229 192 123
+            emphasis_2 198 120 221
+            emphasis_3 86 182 194
+        }
+        // Pane border frame — neutral gray instead of zellij's default
+        // saturated green.
+        frame_unselected {
+            base 108 112 134
+            background 0 0 0
+            emphasis_0 97 175 239
+            emphasis_1 152 195 121
+            emphasis_2 229 192 123
+            emphasis_3 198 120 221
+        }
+        frame_selected {
+            base 97 175 239
+            background 0 0 0
+            emphasis_0 152 195 121
+            emphasis_1 229 192 123
+            emphasis_2 198 120 221
+            emphasis_3 86 182 194
+        }
+    }
+    light {
+        fg "#383A42"
+        bg "#FAFAFA"
+        black "#4F5666"
+        red "#0184BC"
+        green "#50A14F"
+        yellow "#C18401"
+        blue "#0184BC"
+        magenta "#A626A4"
+        cyan "#0997B3"
+        white "#0184BC"
+        orange "#C18401"
+
+        ribbon_unselected {
+            base 56 58 66
+            background 234 234 235
+            emphasis_0 1 132 188
+            emphasis_1 80 161 79
+            emphasis_2 193 132 1
+            emphasis_3 166 38 164
+        }
+        ribbon_selected {
+            base 250 250 250
+            background 1 132 188
+            emphasis_0 80 161 79
+            emphasis_1 193 132 1
+            emphasis_2 166 38 164
+            emphasis_3 9 151 179
+        }
+        text_unselected {
+            base 56 58 66
+            background 250 250 250
+            emphasis_0 1 132 188
+            emphasis_1 80 161 79
+            emphasis_2 193 132 1
+            emphasis_3 166 38 164
+        }
+        text_selected {
+            base 250 250 250
+            background 1 132 188
+            emphasis_0 80 161 79
+            emphasis_1 193 132 1
+            emphasis_2 166 38 164
+            emphasis_3 9 151 179
+        }
+        frame_unselected {
+            base 79 86 102
+            background 250 250 250
+            emphasis_0 1 132 188
+            emphasis_1 80 161 79
+            emphasis_2 193 132 1
+            emphasis_3 166 38 164
+        }
+        frame_selected {
+            base 1 132 188
+            background 250 250 250
+            emphasis_0 80 161 79
+            emphasis_1 193 132 1
+            emphasis_2 166 38 164
+            emphasis_3 9 151 179
+        }
     }
 }
+
+// Follows the host terminal's reported color scheme (CSI 2031 / DSR 997)
+// when supported; falls back to the static `theme` below otherwise.
+theme "dark"
+theme_dark "dark"
+theme_light "light"
+
+// zjstatus (top bar, zellij/layouts/default.kdl) has no theme_dark/theme_light
+// of its own, so it's fixed to the dark palette regardless of $COLOR_MODE.
+// The built-in status-bar (bottom bar) isn't affected — it follows
+// theme_dark/theme_light natively.
 
 keybinds clear-defaults=true {
     normal {
@@ -164,7 +294,7 @@ keybinds clear-defaults=true {
         bind "Alt q" { Quit; }
         // bind "Alt i" { MoveTab "Left"; }
         // bind "Alt o" { MoveTab "Right"; }
-        bind "Alt =" "Alt +" { Resize "Increase"; }
+        bind "Alt =" { Resize "Increase"; }
         bind "Alt -" { Resize "Decrease"; }
         bind "Alt [" { PreviousSwapLayout; }
         bind "Alt ]" { NextSwapLayout; }

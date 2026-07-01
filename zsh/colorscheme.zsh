@@ -1,5 +1,17 @@
 setopt PROMPT_SUBST
-COLOR_MODE="${COLOR_MODE:-dark}"
+
+# Auto-detect the macOS system appearance as the default, so switching it in
+# System Settings is picked up by any shell opened afterward — without this,
+# $COLOR_MODE always silently defaulted to dark. Only used when $COLOR_MODE
+# isn't already set explicitly (e.g. `COLOR_MODE=light zellij` still wins).
+if [ -z "${COLOR_MODE:-}" ] && [ "$(uname)" = "Darwin" ]; then
+    if [ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" = "Dark" ]; then
+        COLOR_MODE=dark
+    else
+        COLOR_MODE=light
+    fi
+fi
+export COLOR_MODE="${COLOR_MODE:-dark}"
 COLORS_FILE=~/.config/dotfiles/kitty/${COLOR_MODE}.conf
 
 # Sync vim colorscheme with terminal.

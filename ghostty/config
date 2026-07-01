@@ -1,0 +1,50 @@
+# ---------------------------------
+# Ghostty Configuration
+# Ported from kitty/kitty.conf — see git history for the kitty version
+# ---------------------------------
+
+# -----------------
+# Fonts & Appearance
+# -----------------
+font-family = FiraCode Nerd Font
+font-size = 18
+
+# -----------------
+# Cursor
+# -----------------
+cursor-style = bar
+
+# -----------------
+# Theme (auto light/dark, follows macOS system appearance natively —
+# replaces the kitty geninclude/color-mode.sh + $COLOR_MODE hack)
+# -----------------
+theme = light:onelight-custom,dark:onedark-custom
+
+# background-opacity = 0.7
+
+# -----------------
+# Bell (BEL from shell/readline on e.g. Delete past end of line — no bell
+# icon in the title, no dock bounce, no sound)
+# -----------------
+bell-features = no-system,no-audio,no-attention,no-title,no-border
+
+# -----------------
+# macOS integration
+# -----------------
+macos-option-as-alt = true
+
+# -----------------
+# Clipboard (match kitty's write-clipboard write-primary read-clipboard read-primary)
+# -----------------
+clipboard-read = allow
+clipboard-write = allow
+
+# -----------------
+# Key Bindings
+# (cmd+1-9 goto_tab, cmd+t new_tab, cmd+enter fullscreen, and
+# super+left/right/backspace word-jump/delete are Ghostty defaults already)
+# -----------------
+keybind = super+s=close_tab:this
+keybind = alt+backspace=text:\x17
+keybind = ctrl+ш=text:\x09
+keybind = ctrl+щ=text:\x0f
