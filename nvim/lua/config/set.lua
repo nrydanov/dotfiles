@@ -2,7 +2,6 @@
 -- Core Interface & Behavior (Neovim 0.11+)
 -- ============================================================================
 vim.opt.termguicolors = true      -- Enable 24-bit RGB color
-vim.opt.background = "dark"
 vim.opt.mouse = "a"               -- Allow mouse usage in all modes
 
 -- Timing (Critical for Leader Key & Responsiveness)
