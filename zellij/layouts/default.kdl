@@ -12,11 +12,10 @@ layout {
                 color_tab        "#6C7086"
                 color_tab_active "#9399B2"
                 color_git        "#8AADF4"
-                color_date       "#6C7086"
 
                 format_left   "{mode} #[fg=$session,bold]{session}"
                 format_center "{tabs}"
-                format_right  "{datetime}"
+                format_right  ""
                 format_space  ""
 
                 border_enabled  "false"
@@ -48,10 +47,6 @@ layout {
                 command_git_branch_format      "#[fg=$git] {stdout} "
                 command_git_branch_interval    "1"
                 command_git_branch_rendermode  "static"
-
-                datetime        "#[fg=$date,bold] {format} "
-                datetime_format "%H:%M"
-                datetime_timezone "Europe/Samara"
             }
         }
         children
