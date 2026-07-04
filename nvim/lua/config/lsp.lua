@@ -76,12 +76,6 @@ vim.lsp.config.millet = {
     root_markers = { ".git" }
 }
 
-vim.lsp.config.pyrefly = {
-    cmd = "pyrefly",
-    filetypes = "py",
-    root_markers = { ".git" }
-}
-
 vim.lsp.config.zuban = {
     cmd = { "zuban", "server" },
     filetypes = { "python" },
