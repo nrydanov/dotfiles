@@ -12,48 +12,16 @@ if [ -z "${COLOR_MODE:-}" ] && [ "$(uname)" = "Darwin" ]; then
     fi
 fi
 export COLOR_MODE="${COLOR_MODE:-dark}"
-COLORS_FILE=~/.config/dotfiles/kitty/${COLOR_MODE}.conf
 
-# Sync vim colorscheme with terminal.
-# Note: TermcolorsShow plugin is required for this to work
-if [ ! -f $COLORS_FILE ]; then
-    nvim -c "TermcolorsShow" -c ":w! $COLORS_FILE" -c "q"
-    cat $COLORS_FILE >> ~/.config/kitty/kitty.conf
-fi
-
+# Prompt colors as ANSI slot numbers, not hex — the terminal's active palette
+# (kitty dark.conf/light.conf, Ghostty's native theme switch) already maps
+# these slots correctly for both color modes, so there's nothing to look up.
 if [ "$(uname)" = "Darwin" ]; then
-    if [ "${COLOR_MODE:-}" = "light" ]; then
-        # Light
-        USER_COLOR=color3
-        USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-        VCS_COLOR=color4
-        VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
-        HOST_COLOR=color3
-        HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-        BACKGROUND_COLOR=inactive_tab_background
-        BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-    else
-        # Dark
-        USER_COLOR=color3
-        USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-        VCS_COLOR=color4
-        VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
-        HOST_COLOR=color3
-        HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-        BACKGROUND_COLOR=inactive_tab_background
-        BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-    fi
+    PROMPT_USER_HOST_COLOR=3
 else
-    # Dark
-    USER_COLOR=color2
-    USER_COLOR_CODE=$(grep "$USER_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-    VCS_COLOR=color4
-    VCS_COLOR_CODE=$(grep "$VCS_COLOR" $COLORS_FILE | cut -d "#" -f 2)
-    HOST_COLOR=color2
-    HOST_COLOR_CODE=$(grep "$HOST_COLOR " $COLORS_FILE | cut -d "#" -f 2)
-    BACKGROUND_COLOR=inactive_tab_background
-    BACKGROUND_COLOR_CODE=$(grep "$BACKGROUND_COLOR " $COLORS_FILE | cut -d "#" -f 2)
+    PROMPT_USER_HOST_COLOR=2
 fi
+PROMPT_VCS_COLOR=4
 
 LSCOLORS=excxcxdxBxgxexabagacad
 LS_COLORS="di=34:ln=32:so=32:pi=33:ex=1;31:bd=36:cd=34:su=30;41:sg=30;46:tw=30;42:ow=30;43"

@@ -9,7 +9,7 @@ source ~/.config/dotfiles/zsh/completion.zsh
 ~/.config/dotfiles/addons/advices.sh ~/.config/dotfiles/.advices
 
 # Prompt format string
-PROMPT=$'%F{#$USER_COLOR_CODE}%n%f%F{#$HOST_COLOR_CODE}@%m %f%1~ %F{#$VCS_COLOR_CODE}${vcs_info_msg_0_}%f$ '
+PROMPT=$'%F{$PROMPT_USER_HOST_COLOR}%n%f%F{$PROMPT_USER_HOST_COLOR}@%m %f%1~ %F{$PROMPT_VCS_COLOR}${vcs_info_msg_0_}%f$ '
 
 # bun completions
 [ -s "/Users/find.art.in.living/.bun/_bun" ] && source "/Users/find.art.in.living/.bun/_bun"
