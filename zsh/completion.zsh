@@ -28,3 +28,6 @@ bindkey -M menuselect '^[[Z'  reverse-menu-complete  # Shift-Tab: prev candidate
 bindkey -M menuselect '^M'    accept-line            # Enter: accept
 bindkey -M menuselect '^[[D'  send-break             # Left: exit menu
 bindkey -M menuselect '^[[C'  send-break             # Right: exit menu
+
+# --- fzf: Ctrl-T (insert file path), Alt-C (cd into directory) ---
+command -v fzf >/dev/null 2>&1 && source <(fzf --zsh)
