@@ -7,6 +7,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export HOMEBREW_NO_AUTO_UPDATE=1
+export BUN_INSTALL="$HOME/.bun"
 
 typeset -U path
 path=(
@@ -14,6 +15,7 @@ path=(
     $HOME/bin
     $HOME/go/bin
     $HOME/.cargo/bin
+    $BUN_INSTALL/bin
     $path
 )
 

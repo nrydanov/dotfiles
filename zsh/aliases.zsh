@@ -10,7 +10,7 @@ alias venv="source .venv/bin/activate"
 
 ## Color output
 if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
-    alias ls='ls --color=always'
+    alias ls='ls --color=auto'
     alias gcc='gcc -fdiagnostics-color=always'
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
