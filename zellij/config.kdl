@@ -155,7 +155,7 @@ keybinds clear-defaults=true {
         bind "Alt g" { SwitchToMode "Normal"; }
     }
     resize {
-        bind "Alt n" { SwitchToMode "Normal"; }
+        bind "Alt r" { SwitchToMode "Normal"; }
         bind "h" "Left" { Resize "Increase Left"; }
         bind "j" "Down" { Resize "Increase Down"; }
         bind "k" "Up" { Resize "Increase Up"; }
@@ -266,29 +266,6 @@ keybinds clear-defaults=true {
             SwitchToMode "Normal"
         }
     }
-    tmux {
-        bind "[" { SwitchToMode "Scroll"; }
-        bind "Alt b" { Write 2; SwitchToMode "Normal"; }
-        bind "\"" { NewPane "Down"; SwitchToMode "Normal"; }
-        bind "%" { NewPane "Right"; SwitchToMode "Normal"; }
-        bind "z" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
-        bind "c" { NewTab; SwitchToMode "Normal"; }
-        bind "," { SwitchToMode "RenameTab"; }
-        bind "p" { GoToPreviousTab; SwitchToMode "Normal"; }
-        bind "n" { GoToNextTab; SwitchToMode "Normal"; }
-        bind "Left" { MoveFocus "Left"; SwitchToMode "Normal"; }
-        bind "Right" { MoveFocus "Right"; SwitchToMode "Normal"; }
-        bind "Down" { MoveFocus "Down"; SwitchToMode "Normal"; }
-        bind "Up" { MoveFocus "Up"; SwitchToMode "Normal"; }
-        bind "h" { MoveFocus "Left"; SwitchToMode "Normal"; }
-        bind "l" { MoveFocus "Right"; SwitchToMode "Normal"; }
-        bind "j" { MoveFocus "Down"; SwitchToMode "Normal"; }
-        bind "k" { MoveFocus "Up"; SwitchToMode "Normal"; }
-        bind "o" { FocusNextPane; }
-        bind "d" { Detach; }
-        bind "Space" { NextSwapLayout; }
-        bind "x" { CloseFocus; SwitchToMode "Normal"; }
-    }
     shared_except "locked" {
         bind "Alt g" { SwitchToMode "Locked"; }
         bind "Alt q" { Quit; }
@@ -320,9 +297,6 @@ keybinds clear-defaults=true {
     shared_except "move" "locked" {
         bind "Alt h" { SwitchToMode "Move"; }
     }
-    shared_except "tmux" "locked" {
-        bind "Alt b" { SwitchToMode "Tmux"; }
-    }
     shared {
         bind "Alt 1" {GoToTab 1; }
         bind "Alt 2" {GoToTab 2; }
@@ -331,7 +305,8 @@ keybinds clear-defaults=true {
         bind "Alt 5" {GoToTab 5; }
         bind "Alt 6" {GoToTab 6; }
         bind "Alt 7" {GoToTab 7; }
-        bind "Alt 7" {GoToTab 7; }
+        bind "Alt 8" {GoToTab 8; }
+        bind "Alt 9" {GoToTab 9; }
         bind "Alt n" {NewTab;}
         bind "Alt w" {CloseTab;}
     }
@@ -407,7 +382,7 @@ simplified_ui false
 // also default to the scrollback size. This does nothing if `serialize_pane_viewport` is not true.
 //
 // scrollback_lines_to_serialize 10000
-scroll_buffer_size 1000
+scroll_buffer_size 10000
 
 // Define color themes for Zellij
 // For more examples, see: https://github.com/zellij-org/zellij/tree/main/example/themes
