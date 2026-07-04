@@ -1,10 +1,8 @@
 autoload -Uz vcs_info
 autoload -U colors && colors
+autoload -Uz add-zsh-hook
 
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' formats '(%b) '
 
-# Just define precmd without hooking it again
-precmd() {
-  vcs_info
-}
+add-zsh-hook precmd vcs_info
