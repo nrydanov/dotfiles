@@ -1,5 +1,6 @@
 ## Claude via proxy
 alias claude='https_proxy=http://127.0.0.1:8001 claude'
+alias hermes='https_proxy=http://127.0.0.1:8001 hermes'
 
 ## Vim
 alias vim=nvim

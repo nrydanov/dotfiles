@@ -1,0 +1,16 @@
+[user]
+name = "Nikita Rydanov"
+email = "find.art.in.living@gmail.com"
+
+[[--scope]]
+--when.repositories = ["~/Documents/Dev/Picodata/"]
+[--scope.user]
+email = "n.rydanov@picodata.io"
+
+[ui]
+diff-formatter = ["difft", "--color=always", "$left", "$right"]
+pager = "less -FRX"
+
+[merge-tools.difft]
+program = "difft"
+diff-args = ["--color=always", "$left", "$right"]

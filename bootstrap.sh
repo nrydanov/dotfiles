@@ -20,11 +20,18 @@ fi
 echo "==> Linking dotfiles"
 sh "$DOTFILES_DIR/setup/ln.sh"
 
+# .secrets is created by ln.sh above if missing; source it now so
+# PROXY_SUBSCRIPTION_LINK (if set) is visible to Brewfile and xray.sh below.
+[ -f "$DOTFILES_DIR/.secrets" ] && . "$DOTFILES_DIR/.secrets"
+
 echo "==> Installing Homebrew + packages"
 sh "$DOTFILES_DIR/setup/brew.sh"
 
 echo "==> Generating shell completions"
 sh "$DOTFILES_DIR/setup/comp.sh"
+
+echo "==> Configuring xray proxy (skipped if PROXY_SUBSCRIPTION_LINK isn't set)"
+sh "$DOTFILES_DIR/setup/xray.sh"
 
 echo "==> Syncing Neovim plugins"
 nvim --headless "+Lazy! sync" +qa

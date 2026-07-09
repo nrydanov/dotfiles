@@ -30,4 +30,19 @@ bindkey -M menuselect '^[[D'  send-break             # Left: exit menu
 bindkey -M menuselect '^[[C'  send-break             # Right: exit menu
 
 # --- fzf: Ctrl-T (insert file path), Alt-C (cd into directory) ---
-command -v fzf >/dev/null 2>&1 && source <(fzf --zsh)
+if command -v fzf >/dev/null 2>&1; then
+  if fzf --help 2>&1 | grep -q -- '--zsh'; then
+    source <(fzf --zsh)
+  else
+    for fzf_zsh_file in \
+      /usr/share/fzf/completion.zsh \
+      /usr/share/fzf/key-bindings.zsh \
+      /usr/share/doc/fzf/examples/completion.zsh \
+      /usr/share/doc/fzf/examples/key-bindings.zsh \
+      "${HOMEBREW_PREFIX:-}/opt/fzf/shell/completion.zsh" \
+      "${HOMEBREW_PREFIX:-}/opt/fzf/shell/key-bindings.zsh"; do
+      [[ -r "$fzf_zsh_file" ]] && source "$fzf_zsh_file"
+    done
+    unset fzf_zsh_file
+  fi
+fi

@@ -28,6 +28,7 @@ link "$DOTFILES/kitty"    "$XDG_CONFIG_HOME/kitty"
 link "$DOTFILES/ghostty"  "$XDG_CONFIG_HOME/ghostty"
 link "$DOTFILES/zellij"   "$XDG_CONFIG_HOME/zellij"
 link "$DOTFILES/k9s"      "$XDG_CONFIG_HOME/k9s"
+link "$DOTFILES/jj/config.toml" "$XDG_CONFIG_HOME/jj/config.toml"
 
 # ~/.gitconfig stays a real file (not a symlink) so machine-local additions
 # (work includeif, diff.external, etc.) can live above the shared config.

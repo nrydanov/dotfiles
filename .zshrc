@@ -6,6 +6,7 @@ source ~/.config/dotfiles/zsh/colorscheme.zsh
 source ~/.config/dotfiles/zsh/history.zsh
 source ~/.config/dotfiles/zsh/git.zsh
 source ~/.config/dotfiles/zsh/completion.zsh
+source ~/.config/dotfiles/zsh/proxy.zsh
 ~/.config/dotfiles/addons/advices.sh ~/.config/dotfiles/.advices
 
 # Prompt format string
@@ -13,3 +14,6 @@ PROMPT=$'%F{$PROMPT_USER_HOST_COLOR}%n%f%F{$PROMPT_USER_HOST_COLOR}@%m %f%1~ %F{
 
 # bun completions
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
+
+# opencode
+export PATH=/Users/find.art.in.living/.opencode/bin:$PATH
