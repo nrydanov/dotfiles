@@ -2,10 +2,27 @@ return {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
     lazy = false,
-    build = ":TSUpdate",
+    build = function()
+        require("nvim-treesitter").update():wait(300000)
+    end,
     config = function()
-        require("nvim-treesitter").setup({
-            auto_install = true,
+        local treesitter = require("nvim-treesitter")
+
+        treesitter.setup({
+            install_dir = vim.fn.stdpath("data") .. "/site",
+        })
+
+        treesitter.install({
+            "bash",
+            "json",
+            "lua",
+            "markdown",
+            "markdown_inline",
+            "query",
+            "rust",
+            "toml",
+            "vim",
+            "vimdoc",
         })
     end
 }
