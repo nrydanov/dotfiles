@@ -20,13 +20,13 @@ return {
             --- Navigation
             map('n', ']g', function()
                 if vim.wo.diff then return ']c' end
-                vim.schedule(function() gs.next_hunk() end)
+                vim.schedule(function() gs.nav_hunk('next') end)
                 return '<Ignore>'
             end, { expr = true })
 
             map('n', '[g', function()
                 if vim.wo.diff then return '[c' end
-                vim.schedule(function() gs.prev_hunk() end)
+                vim.schedule(function() gs.nav_hunk('prev') end)
                 return '<Ignore>'
             end, { expr = true })
 
@@ -43,7 +43,7 @@ return {
             map('n', '<leader>tb', gs.toggle_current_line_blame)
             map('n', '<leader>hd', gs.diffthis)
             map('n', '<leader>hD', function() gs.diffthis('~') end)
-            map('n', '<leader>td', gs.toggle_deleted)
+            map('n', '<leader>hT', gs.toggle_deleted)
         end
     }
 }

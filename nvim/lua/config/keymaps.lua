@@ -5,8 +5,8 @@ vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 -- File Explorer and Diagnostics
 vim.keymap.set("n", "<leader>d", function() Snacks.explorer() end, { desc = "Toggle Explorer" })
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open Diagnostic Float" })
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { noremap = true, silent = true })
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { noremap = true, silent = true })
+vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { noremap = true, silent = true })
+vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { noremap = true, silent = true })
 
 -- Custom motion mappings (ensure these overrides are intentional)
 vim.keymap.set("n", "E", "$", { remap = true, silent = true }) -- Jump to end of line

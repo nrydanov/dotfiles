@@ -26,6 +26,9 @@ return {
         picker = {
             sources = {
                 explorer = {
+                    diagnostics = true,
+                    git_status = true,
+                    watch = true,
                     jump = {
                         close = true,
                     },
