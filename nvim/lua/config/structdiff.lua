@@ -38,6 +38,22 @@ local function temp_copy(name, lines)
     return path
 end
 
+-- Old path of `rel` if git sees it as renamed between the base and the
+-- working tree (needs the new path to be tracked, which an MR commit is).
+local function rename_source(rel, dir)
+    local out = git({ "diff", "--name-status", "-M", "-z", "--diff-filter=R", state.base }, dir)
+    if not out then
+        return nil
+    end
+    local fields = vim.split(out, "\0", { trimempty = true })
+    for i = 1, #fields - 2, 3 do
+        if fields[i + 2] == rel then
+            return fields[i + 1]
+        end
+    end
+    return nil
+end
+
 -- Content of the file at `state.base`, written once per buffer and cached.
 local function base_file(bufnr)
     local buf = state.bufs[bufnr]
@@ -52,6 +68,11 @@ local function base_file(bufnr)
     end
     local rel = vim.fs.relpath(vim.trim(root), name)
     local content = rel and git({ "show", state.base .. ":" .. rel }, dir)
+    if rel and not content then
+        -- Not at this path in the base: maybe it was renamed since.
+        local old = rename_source(rel, dir)
+        content = old and git({ "show", state.base .. ":" .. old }, dir)
+    end
     buf.base_missing = content == nil
     buf.base_text = content or ""
     local lines = vim.split(buf.base_text, "\n")

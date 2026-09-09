@@ -1,6 +1,4 @@
-local specs = {
-    "tests.structdiff_spec",
-}
+local specs = { vim.env.SPEC or "tests.structdiff_spec" }
 
 local failures, total = {}, 0
 

@@ -318,10 +318,17 @@ function M.files(target)
             local symbol = status[item.file] or " "
             local hl = symbol == "✓" and "SnacksPickerGitStatusAdded" or "SnacksPickerGitStatusModified"
             local ret = { { symbol, hl }, { " " } }
+            local rest = Snacks.picker.format.git_status(item, picker)
             if semantic[item.file] == "unchanged" then
-                return vim.list_extend(ret, { { " =", "StructDiffFormat" }, { " " }, { item.file, "StructDiffFormat" } })
+                -- Same row (icon included), just dimmed and with "=" for status.
+                rest[1] = { " =", "StructDiffFormat" }
+                for i = 2, #rest do
+                    if rest[i][2] then
+                        rest[i][2] = "StructDiffFormat"
+                    end
+                end
             end
-            return vim.list_extend(ret, Snacks.picker.format.git_status(item, picker))
+            return vim.list_extend(ret, rest)
         end,
         preview = function(ctx)
             if structural then

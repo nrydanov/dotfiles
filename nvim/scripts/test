@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Unit specs run without plugins; integration specs load the full config.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-nvim --headless -u NONE --cmd "set rtp^=$PWD" -c 'luafile tests/run.lua'
+SPEC=tests.structdiff_spec nvim --headless -u NONE --cmd "set rtp^=$PWD" -c 'luafile tests/run.lua'
+SPEC=tests.integration_spec nvim --headless -u init.lua -c 'luafile tests/run.lua'

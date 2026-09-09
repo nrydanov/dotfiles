@@ -85,6 +85,15 @@ function M.test_new_file_marks_every_line_as_added()
     h.assert_eq(h.marks(bufnr), { "Add", "Add" })
 end
 
+function M.test_renamed_file_diffs_against_its_old_path()
+    local dir = h.repo({ ["old.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\n" })
+    vim.system({ "git", "mv", "old.lua", "new.lua" }, { cwd = dir }):wait()
+    h.write(dir, "new.lua", "local a = 1\nlocal b = 9\nlocal c = 3\n")
+    local bufnr = h.open(dir, "new.lua")
+
+    h.assert_eq(h.marks(bufnr), { [2] = "Change" }, "only the edited line, not a whole new file")
+end
+
 function M.test_unchanged_file_has_no_marks()
     local dir = h.repo({ ["a.lua"] = "local a = 1\n" })
     local bufnr = h.open(dir, "a.lua")
