@@ -24,6 +24,10 @@ return {
         },
         input = { enabled = true },
         picker = {
+            -- Machine-local ~/.gitconfig may set diff.external (difftastic etc.);
+            -- previews need plain git diff output so the "diff" filetype
+            -- highlights it. Applies to every git previewer, not just status.
+            previewers = { git = { args = { "-c", "diff.external=" } } },
             sources = {
                 explorer = {
                     diagnostics = true,

@@ -1,7 +1,8 @@
 #!/bin/sh
 set -eu
 
-ZSH_COMPLETIONS_DIR="${XDG_DATA_HOME}/zsh/completions"
+XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+ZSH_COMPLETIONS_DIR="$XDG_DATA_HOME/zsh/completions"
 mkdir -p "$ZSH_COMPLETIONS_DIR"
 
 gen() {

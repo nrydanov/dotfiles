@@ -1,10 +1,6 @@
 # This is Git's per-user configuration file.
 [user]
     email = find.art.in.living@gmail.com
-[commit]
- ; gpgsign = true
-[gpg]
-    program = gpg
 [push]
     autoSetupRemote = true
     default = current
@@ -16,11 +12,6 @@
     ch = "!fn() { git branch | fzf | xargs git checkout;}; fn"
     s = status
     c = commit
-[filter "lfs"]
-    required = true
-    clean = git-lfs clean -- %f
-    smudge = git-lfs smudge -- %f
-    process = git-lfs filter-process
 [init]
     defaultBranch = main
 [rerere]

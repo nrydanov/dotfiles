@@ -16,6 +16,8 @@ path=(
     $HOME/go/bin
     $HOME/.cargo/bin
     $BUN_INSTALL/bin
+    $HOME/.docker/bin    # Docker Desktop
+    $HOME/.lmstudio/bin  # LM Studio CLI (lms)
     $path
 )
 

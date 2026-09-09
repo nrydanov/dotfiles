@@ -1,6 +1,8 @@
 #!/bin/sh
 set -eu
 
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+
 # Homebrew's own Linux installer needs these already present — it can't
 # bootstrap itself with them missing. Debian/Ubuntu only; on any other
 # distro (or without apt-get) install them manually first:

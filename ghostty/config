@@ -6,8 +6,20 @@
 # -----------------
 # Fonts & Appearance
 # -----------------
-font-family = FiraCode Nerd Font
+font-family = FiraCode Nerd Font Mono
 font-size = 18
+
+# -----------------
+# Window
+# (window height is rarely an exact multiple of the cell height; by default
+# the top-left cell hugs the edge and the whole remainder pools at the bottom
+# and right, leaving a dead strip under zellij's status bar)
+# -----------------
+window-padding-balance = true
+# ...and paint what's left with the nearest cell's background rather than the
+# configured one, so the leftover strip blends into zellij's black status bar
+# instead of showing up as a #0d0f13 band under it.
+window-padding-color = extend
 
 # -----------------
 # Cursor

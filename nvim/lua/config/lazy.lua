@@ -6,7 +6,7 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 -- Bootstrap lazy.nvim if not already installed
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git", "clone", "--filter=blob:none",
         "https://github.com/folke/lazy.nvim.git",
@@ -15,7 +15,10 @@ if not vim.loop.fs_stat(lazypath) then
     })
 end
 
--- Prepend lazy.nvim to the runtime path
+-- Prepend lazy.nvim to the runtime path.
+-- lua_ls types `vim.opt.rtp` as its value type (string[]) rather than as
+-- vim.Option, so it can't see the :prepend() method that exists at runtime.
+---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 -- ============================================================================
@@ -40,26 +43,24 @@ require("lazy").setup({
     },
     performance = {
         cache = {
-            enabled = true,    -- Включить кэширование для ускорения загрузки
+            enabled = true,    -- Cache compiled Lua to speed up startup
         },
-        reset_packpath = true, -- Сбросить packpath для чистоты
+        reset_packpath = true, -- Drop the default packpath
         rtp = {
-            reset = true,      -- Сбросить runtime path
-            paths = {},        -- Добавить дополнительные пути при необходимости
+            reset = true,      -- Drop the default runtime path
+            paths = {},        -- Extra runtime paths, if ever needed
+            -- Only names that actually exist in $VIMRUNTIME/plugin belong here;
+            -- anything else is silently ignored. Check with:
+            --     :!ls $VIMRUNTIME/plugin
             disabled_plugins = {
                 "gzip",
                 "matchit",
                 "matchparen",
+                "netrwPlugin",
+                "rplugin",
                 "tarPlugin",
-                "tohtml",
                 "tutor",
                 "zipPlugin",
-                "rplugin", -- Отключить remote plugins если не используете
-                "synmenu",
-                "optwin",
-                "compiler",
-                "bugreport",
-                "ftplugin",
             },
         },
     },

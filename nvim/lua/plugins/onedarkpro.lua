@@ -3,7 +3,7 @@ return {
     priority = 1000, -- Ensure it loads first
     opts = function()
         local helper = require("onedarkpro.helpers")
-        local colors = helper.get_colors() -- берёт палитру текущей темы
+        local colors = helper.get_colors() -- palette of the currently active theme
 
         return {
             options = {

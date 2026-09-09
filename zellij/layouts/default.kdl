@@ -12,11 +12,19 @@ layout {
                 color_tab        "#6C7086"
                 color_tab_active "#9399B2"
                 color_git        "#8AADF4"
+                color_date       "#6C7086"
+                color_work       "#A6DA95"
 
                 format_left   "{mode} #[fg=$session,bold]{session}"
                 format_center "{tabs}"
-                format_right  ""
+                format_right  "{command_worktime}{datetime}"
                 format_space  ""
+
+                // Without this the whole bar goes blank when content exceeds
+                // the terminal width; instead drop parts, keeping tabs first,
+                // then mode/session, dropping worktime/clock soonest.
+                format_hide_on_overlength "true"
+                format_precedence         "clr"
 
                 border_enabled  "false"
                 border_char     "─"
@@ -47,6 +55,19 @@ layout {
                 command_git_branch_format      "#[fg=$git] {stdout} "
                 command_git_branch_interval    "1"
                 command_git_branch_rendermode  "static"
+
+                // Time worked today, from zellij/scripts/worktime.sh. zjstatus
+                // runs commands without a shell, so `bash -c` is needed for ~.
+                command_worktime_command    "bash -c \"~/.config/zellij/scripts/worktime.sh\""
+                command_worktime_format     "#[fg=$work,bold] {stdout} "
+                command_worktime_interval   "60"
+                command_worktime_rendermode "static"
+
+                // The WASM sandbox can't read the system timezone, so it must
+                // be named explicitly.
+                datetime          "#[fg=$date,bold] {format} "
+                datetime_format   "%H:%M"
+                datetime_timezone "Europe/Samara"
             }
         }
         children

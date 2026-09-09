@@ -1,35 +1,74 @@
 local M = {}
 
 function M.assert_eq(actual, expected, message)
-    if actual ~= expected then
-        error((message or "assert_eq failed") .. "\nexpected: " .. vim.inspect(expected) .. "\nactual: " .. vim.inspect(actual), 2)
+    if not vim.deep_equal(actual, expected) then
+        error((message or "assert_eq failed") .. "\nexpected: " .. vim.inspect(expected)
+            .. "\nactual: " .. vim.inspect(actual), 2)
     end
 end
 
-function M.assert_truthy(value, message)
-    if not value then
-        error(message or "expected truthy value", 2)
+local function sh(args, cwd)
+    local res = vim.system(args, { cwd = cwd, text = true }):wait()
+    assert(res.code == 0, table.concat(args, " ") .. " failed: " .. (res.stderr or ""))
+    return res.stdout
+end
+
+--- Fresh git repo with `files` (name -> text) committed as HEAD.
+function M.repo(files)
+    local dir = vim.fn.tempname()
+    vim.fn.mkdir(dir, "p")
+    sh({ "git", "init", "-q" }, dir)
+    for name, text in pairs(files) do
+        M.write(dir, name, text)
     end
+    sh({ "git", "add", "-A" }, dir)
+    sh({ "git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "init", "--allow-empty" }, dir)
+    return dir
 end
 
-function M.assert_false(value, message)
-    if value then
-        error(message or "expected false/nil value", 2)
+function M.write(dir, name, text)
+    local path = vim.fs.joinpath(dir, name)
+    vim.fn.mkdir(vim.fs.dirname(path), "p")
+    local lines = vim.split(text, "\n")
+    if lines[#lines] == "" then
+        lines[#lines] = nil
     end
+    vim.fn.writefile(lines, path)
+    return path
 end
 
-function M.current_buf_overlay_extmarks()
-    return vim.api.nvim_buf_get_extmarks(0, vim.api.nvim_create_namespace("structdiff_overlay"), 0, -1, { details = true })
+--- Open `name` from `dir`, enable structdiff against HEAD and wait for marks.
+function M.open(dir, name)
+    local sd = require("config.structdiff")
+    sd.disable()
+    vim.cmd("edit! " .. vim.fn.fnameescape(vim.fs.joinpath(dir, name)))
+    local bufnr = vim.api.nvim_get_current_buf()
+    sd.enable("HEAD")
+    M.wait_run(bufnr)
+    return bufnr
 end
 
-function M.count_virtual_lines(extmarks)
-    local count = 0
-    for _, mark in ipairs(extmarks) do
-        if mark[4] and mark[4].virt_lines then
-            count = count + 1
+function M.wait_run(bufnr)
+    local sd = require("config.structdiff")
+    local before = sd._generation(bufnr)
+    assert(vim.wait(3000, function()
+        return sd._generation(bufnr) > before
+    end, 20), "difft run did not finish")
+end
+
+--- Signs by line: { [lnum] = "Add" | "Change" | "Format" }, plus inline ranges.
+function M.marks(bufnr)
+    local ns = vim.api.nvim_create_namespace("structdiff")
+    local signs, inline = {}, {}
+    for _, m in ipairs(vim.api.nvim_buf_get_extmarks(bufnr, ns, 0, -1, { details = true })) do
+        local d = m[4]
+        if d.sign_text then
+            signs[m[2] + 1] = d.sign_hl_group:gsub("^GitSigns", ""):gsub("^StructDiff", "")
+        elseif d.hl_group then
+            inline[#inline + 1] = { m[2] + 1, m[3], d.end_col }
         end
     end
-    return count
+    return signs, inline
 end
 
 return M

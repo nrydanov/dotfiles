@@ -1,6 +1,3 @@
-## Claude via proxy
-alias claude='https_proxy=http://127.0.0.1:8001 claude'
-
 ## Vim
 alias vim=nvim
 ## Kubernetes
@@ -18,3 +15,9 @@ if [ -x /usr/bin/dircolors ] || [ "$(uname)" = "Darwin" ]; then
     alias cargo='cargo --color=always'
     alias cargo-clippy='cargo-clippy --color=always'
 fi
+
+## Work timer (zjstatus bar, zellij/scripts/worktime.sh)
+alias worktime="~/.config/zellij/scripts/worktime.sh show; echo"
+alias worktime-pause="~/.config/zellij/scripts/worktime.sh pause; echo"
+alias worktime-resume="~/.config/zellij/scripts/worktime.sh resume; echo"
+alias worktime-reset="~/.config/zellij/scripts/worktime.sh reset; echo"

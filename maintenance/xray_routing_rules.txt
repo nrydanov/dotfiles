@@ -1,0 +1,11 @@
+# Xray / V2RayXS routing rules to proxy (one rule per line).
+# Geosite/geoip tags come from runetfreedom/russia-v2ray-rules-dat,
+# which maintenance/update_xray_lists.sh installs into V2RayXS.
+# Restore: add each line to the "proxy" outbound rule in the client.
+
+geosite:ru-blocked
+geosite:anthropic
+speedtest.net
+geoip:telegram
+geosite:telegram
+geosite:openai

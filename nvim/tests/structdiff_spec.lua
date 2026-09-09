@@ -3,105 +3,203 @@ local sd = require("config.structdiff")
 
 local M = {}
 
-local function scratch(lines)
+local RUST_ONE_LINE = [[
+struct Config { name: String, retries: u32 }
+
+fn build(name: &str, retries: u32) -> Config {
+    Config { name: name.to_string(), retries }
+}
+
+fn main() {
+    let cfg = build("picodata", 3);
+}
+]]
+
+-- rustfmt layout of RUST_ONE_LINE. Trailing commas after the last field are
+-- new tokens, so the struct literal on line 12 is a legitimate change.
+local RUST_REFLOWED = [[
+struct Config {
+    name: String,
+    retries: u32,
+}
+
+fn build(
+    name: &str,
+    retries: u32,
+) -> Config {
+    Config {
+        name: name.to_string(),
+        retries,
+    }
+}
+
+fn main() {
+    let cfg = build("picodata", 3);
+}
+]]
+
+function M.test_reflow_only_gives_dim_marks_and_no_bright_ones()
+    local dir = h.repo({ ["src/main.rs"] = RUST_ONE_LINE })
+    h.write(dir, "src/main.rs", RUST_REFLOWED)
+    local bufnr = h.open(dir, "src/main.rs")
+
+    local signs = h.marks(bufnr)
+    local bright = {}
+    for lnum, kind in pairs(signs) do
+        if kind ~= "Format" then
+            bright[#bright + 1] = lnum
+        end
+    end
+    h.assert_eq(bright, { 12 }, "only the trailing comma line is semantic")
+    h.assert_eq(signs[1], "Format", "reflowed struct header is formatting only")
+    h.assert_eq(signs[6], "Format", "reflowed fn signature is formatting only")
+    h.assert_eq(signs[16], nil, "untouched line has no mark")
+end
+
+function M.test_real_change_inside_reflow_is_bright_with_inline_range()
+    local dir = h.repo({ ["src/main.rs"] = RUST_ONE_LINE })
+    h.write(dir, "src/main.rs", RUST_REFLOWED:gsub('build%("picodata", 3%)', 'build("picodata", 7)'))
+    local bufnr = h.open(dir, "src/main.rs")
+
+    local signs, inline = h.marks(bufnr)
+    h.assert_eq(signs[17], "Change")
+    h.assert_eq(inline[#inline], { 17, 32, 33 }, "inline mark covers exactly the `7`")
+end
+
+function M.test_unicode_inline_columns_are_bytes()
+    local dir = h.repo({ ["a.lua"] = 'local x = "ü"\n' })
+    h.write(dir, "a.lua", 'local x = "ü" .. "я"\n')
+    local bufnr = h.open(dir, "a.lua")
+
+    local _, inline = h.marks(bufnr)
+    local text = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1]
+    local last = inline[#inline]
+    h.assert_eq(text:sub(last[2] + 1, last[3]), '"я"', "byte range lands on the added literal")
+end
+
+function M.test_new_file_marks_every_line_as_added()
+    local dir = h.repo({ ["keep.txt"] = "x\n" })
+    h.write(dir, "fresh.lua", "local a = 1\nlocal b = 2\n")
+    local bufnr = h.open(dir, "fresh.lua")
+
+    h.assert_eq(h.marks(bufnr), { "Add", "Add" })
+end
+
+function M.test_unchanged_file_has_no_marks()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\n" })
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr), {})
+end
+
+function M.test_whitespace_only_change_is_format()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\n" })
+    h.write(dir, "a.lua", "local a  =  1\n\n\nlocal b = 2\n")
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr), { "Format", "Format", "Format" })
+end
+
+-- Deletions have no right-hand line, so today neither bucket shows them.
+-- This pins the current behaviour until deleted lines are rendered.
+function M.test_pure_deletion_is_invisible_for_now()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\n" })
+    h.write(dir, "a.lua", "local a = 1\nlocal c = 3\n")
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr), {})
+end
+
+function M.test_unknown_language_falls_back_to_text_diff()
+    local dir = h.repo({ ["notes.xyz"] = "alpha\nbeta\n" })
+    h.write(dir, "notes.xyz", "alpha\ngamma\n")
+    local bufnr = h.open(dir, "notes.xyz")
+    local signs = h.marks(bufnr)
+    h.assert_eq(signs[2], "Change", "difft text mode still yields a change")
+end
+
+function M.test_comment_change_is_semantic()
+    local dir = h.repo({ ["a.lua"] = "-- old note\nlocal a = 1\n" })
+    h.write(dir, "a.lua", "-- new note\nlocal a = 1\n")
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr)[1], "Change")
+end
+
+function M.test_string_content_change_is_semantic()
+    local dir = h.repo({ ["a.lua"] = 'print("a b")\n' })
+    h.write(dir, "a.lua", 'print("a  b")\n')
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr)[1], "Change", "whitespace inside a string is a real change")
+end
+
+function M.test_file_outside_repo_is_ignored()
+    sd.disable()
+    local dir = vim.fn.tempname()
+    local path = h.write(dir, "a.lua", "local a = 1\n")
+    vim.cmd("edit! " .. vim.fn.fnameescape(path))
+    local bufnr = vim.api.nvim_get_current_buf()
+    sd.enable("HEAD")
+    vim.wait(600)
+    h.assert_eq(h.marks(bufnr), {})
+    h.assert_eq(sd._generation(bufnr), 0, "no difft run for a file outside git")
+end
+
+function M.test_scratch_buffer_is_ignored()
+    sd.disable()
     vim.cmd("enew!")
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
     vim.bo.buftype = "nofile"
+    local bufnr = vim.api.nvim_get_current_buf()
+    sd.enable("HEAD")
+    vim.wait(600)
+    h.assert_eq(sd._generation(bufnr), 0)
 end
 
-function M.test_public_api_exists()
-    for _, name in ipairs({
-        "setup",
-        "refresh",
-        "next_hunk",
-        "prev_hunk",
-        "preview_hunk",
-        "toggle_overlay",
-        "show_overlay",
-        "clear_overlay",
-        "toggle_signs",
-        "close_preview",
-    }) do
-        h.assert_eq(type(sd[name]), "function", name .. " should be a function")
+function M.test_refresh_after_edit_updates_marks()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\n" })
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr), {})
+
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "local a = 2" })
+    sd.refresh(bufnr)
+    h.wait_run(bufnr)
+    h.assert_eq(h.marks(bufnr)[1], "Change")
+end
+
+function M.test_disable_clears_marks_and_state()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\n" })
+    h.write(dir, "a.lua", "local a = 2\n")
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr)[1], "Change")
+
+    sd.disable()
+    h.assert_eq(sd.active(), false)
+    h.assert_eq(h.marks(bufnr), {})
+end
+
+function M.test_nav_skips_format_lines_and_wraps()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\n" })
+    h.write(dir, "a.lua", "local a  = 1\nlocal b = 9\nlocal c  = 3\nlocal d = 4\n")
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr), { "Format", "Change", "Format", "Add" })
+
+    vim.api.nvim_win_set_cursor(0, { 1, 0 })
+    local visited = {}
+    for _ = 1, 3 do
+        sd.nav("next")
+        visited[#visited + 1] = vim.api.nvim_win_get_cursor(0)[1]
     end
+    h.assert_eq(visited, { 2, 4, 2 }, "next skips dim lines and wraps")
+    sd.nav("prev")
+    h.assert_eq(vim.api.nvim_win_get_cursor(0)[1], 4, "prev wraps backwards")
 end
 
-function M.test_difftastic_parser_preserves_leading_spaces()
-    local out = "\27[91;1m2 \27[0m   \27[91;1m        removed();\27[0m\n"
-        .. "   \27[92;1m3 \27[0m\27[92m        added();\27[0m"
-    local parsed = sd._parse_difftastic_overlay(out)
-
-    h.assert_eq(parsed.deletions[1].content, "        removed();", "deleted content should keep indentation")
-
-    local added = ""
-    for _, segment in ipairs(parsed.additions[1].segments) do
-        added = added .. segment[1]
-    end
-    h.assert_eq(added, "        added();", "added content should keep indentation")
+function M.test_format_highlight_survives_colorscheme_switch()
+    vim.cmd("colorscheme blue")
+    vim.cmd("colorscheme default")
+    h.assert_eq(vim.api.nvim_get_hl(0, { name = "StructDiffFormat" }).link, "NonText")
 end
 
-function M.test_additions_do_not_render_duplicate_overlay_lines_or_highlights()
-    scratch({
-        "fn should_skip_ttl(header: &KeyHeader, min_ttl: Duration) -> bool {",
-        "    header",
-        "        .expire_at",
-        "        .is_some_and(|t| t < std::time::SystemTime::now() + min_ttl)",
-        "}",
-    })
-
-    local changes = {
-        additions = {
-            {
-                line_num = 4,
-                segments = {
-                    { "        .is_some_and(|t| t < std::time::SystemTime::now() + min_ttl)", "StructDiffAddToken" },
-                },
-            },
-        },
-        modifications = {},
-        deletions = {},
-    }
-
-    local marks = sd._render_overlay_changes(0, changes)
-    h.assert_eq(#marks, 0, "pure additions should rely on signs and must not duplicate/highlight existing code")
-end
-
-function M.test_deletions_render_virtual_lines_with_indentation()
-    scratch({
-        "fn main() {",
-        "    kept();",
-        "}",
-    })
-
-    local changes = {
-        additions = {},
-        modifications = {},
-        deletions = {
-            { line_num = 2, content = "        removed();" },
-        },
-    }
-
-    local marks = sd._render_overlay_changes(0, changes)
-    h.assert_eq(h.count_virtual_lines(marks), 1, "deletions should render as virtual lines")
-    local virt = marks[1][4].virt_lines[1][1][1]
-    h.assert_eq(virt, "  -         removed();", "deleted virtual line should preserve source indentation")
-end
-
-function M.test_modifications_render_inline_highlights_without_opening_windows()
-    scratch({ "let value = new_value;" })
-    local wins_before = #vim.api.nvim_list_wins()
-    local changes = {
-        additions = {},
-        modifications = {
-            { line_num = 1, segments = { { "let value = ", "Normal" }, { "new_value", "StructDiffAddToken" }, { ";", "Normal" } } },
-        },
-        deletions = {},
-    }
-
-    local marks = sd._render_overlay_changes(0, changes)
-    h.assert_eq(#vim.api.nvim_list_wins(), wins_before, "overlay rendering should not open windows")
-    h.assert_truthy(#marks > 0, "modification overlay should create inline extmarks")
-    h.assert_eq(h.count_virtual_lines(marks), 0, "modifications should not render virtual duplicate lines")
+function M.test_empty_file_both_sides()
+    local dir = h.repo({ ["a.lua"] = "" })
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr), {})
 end
 
 return M
