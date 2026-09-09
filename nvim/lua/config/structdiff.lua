@@ -14,7 +14,7 @@ local group = vim.api.nvim_create_augroup("structdiff", { clear = true })
 local DEBOUNCE_MS = 300
 
 -- state.base: commit to diff against
--- state.bufs[bufnr] = { lines, base_file, base_text, timer, run_id, generation }
+-- state.bufs[bufnr] = { lines, base_file, base_text, base_lines, timer, run_id, generation }
 local state = { base = nil, bufs = {} }
 
 -- Lines git would flag but difft considers pure formatting. A default link
@@ -58,6 +58,7 @@ local function base_file(bufnr)
     if lines[#lines] == "" then
         lines[#lines] = nil
     end
+    buf.base_lines = lines
     buf.base_file = temp_copy(name, lines)
     return buf.base_file
 end
@@ -110,9 +111,109 @@ local function mark_format_only(bufnr, lnum)
     })
 end
 
+-- For every deleted base line (0-based), the 1-based buffer line it sits
+-- above; `last + 1` when the deletion happened at the end of the file.
+local function deletion_anchors(aligned, last)
+    local anchors, pending = {}, {}
+    for _, pair in ipairs(aligned or {}) do
+        local lhs, rhs = pair[1], pair[2]
+        if rhs == vim.NIL or rhs == nil then
+            if lhs ~= vim.NIL and lhs ~= nil then
+                pending[#pending + 1] = lhs
+            end
+        else
+            for _, l in ipairs(pending) do
+                anchors[l] = math.min(rhs + 1, last + 1)
+            end
+            pending = {}
+        end
+    end
+    for _, l in ipairs(pending) do
+        anchors[l] = last + 1
+    end
+    return anchors
+end
+
+-- One virtual line: base text with the deleted tokens emphasised.
+local function deleted_segments(text, changes)
+    local segs, pos = {}, 0
+    for _, ch in ipairs(changes) do
+        local s, e = math.min(ch.start, #text), math.min(ch["end"], #text)
+        if s > pos then
+            segs[#segs + 1] = { text:sub(pos + 1, s), "GitSignsDeleteVirtLn" }
+        end
+        if e > s then
+            segs[#segs + 1] = { text:sub(s + 1, e), "GitSignsDeleteVirtLnInLine" }
+        end
+        pos = math.max(pos, e)
+    end
+    if pos < #text then
+        segs[#segs + 1] = { text:sub(pos + 1), "GitSignsDeleteVirtLn" }
+    end
+    if #segs == 0 then
+        segs[1] = { "", "GitSignsDeleteVirtLn" }
+    end
+    return segs
+end
+
+-- Deleted lines render as virtual lines above their anchor (or below the
+-- last line); the anchor itself becomes a navigation stop with a "▁" sign
+-- unless it already carries a bright mark.
+local function mark_deletions(bufnr, result, last, marked, lines)
+    local buf = state.bufs[bufnr]
+    local anchors = deletion_anchors(result.aligned_lines, last)
+    local groups, order = {}, {}
+    if result.status == "deleted" then
+        -- Buffer emptied: difft sends no chunks, every base line is gone.
+        groups[last + 1], order[1] = {}, last + 1
+        for i, text in ipairs(buf.base_lines) do
+            groups[last + 1][i] = { i - 1, deleted_segments(text, {}) }
+        end
+    end
+    for _, chunk in ipairs(result.chunks or {}) do
+        for _, pair in ipairs(chunk) do
+            local lhs = pair.lhs
+            if lhs and not pair.rhs and buf.base_lines[lhs.line_number + 1] then
+                local anchor = anchors[lhs.line_number] or last + 1
+                if not groups[anchor] then
+                    groups[anchor] = {}
+                    order[#order + 1] = anchor
+                end
+                local text = buf.base_lines[lhs.line_number + 1]
+                groups[anchor][#groups[anchor] + 1] = { lhs.line_number, deleted_segments(text, lhs.changes or {}) }
+            end
+        end
+    end
+    for _, anchor in ipairs(order) do
+        table.sort(groups[anchor], function(a, b)
+            return a[1] < b[1]
+        end)
+        local virt = {}
+        for _, item in ipairs(groups[anchor]) do
+            virt[#virt + 1] = item[2]
+        end
+        local above = anchor <= last
+        local row = (above and anchor or last) - 1
+        vim.api.nvim_buf_set_extmark(bufnr, ns, row, 0, {
+            virt_lines = virt,
+            virt_lines_above = above,
+        })
+        local stop = above and anchor or last
+        if not marked[stop] then
+            marked[stop] = true
+            lines[#lines + 1] = stop
+            vim.api.nvim_buf_set_extmark(bufnr, ns, stop - 1, 0, {
+                sign_text = "▁",
+                sign_hl_group = "GitSignsDelete",
+                priority = 6,
+            })
+        end
+    end
+end
+
 local function apply(bufnr, result)
     vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
-    local lines = {}
+    local lines, marked = {}, {}
     local last = vim.api.nvim_buf_line_count(bufnr)
     local textual = text_changed_lines(bufnr)
 
@@ -131,10 +232,12 @@ local function apply(bufnr, result)
                     mark_line(bufnr, lnum, kind)
                     mark_tokens(bufnr, lnum, kind, rhs.changes or {})
                     lines[#lines + 1] = lnum
+                    marked[lnum] = true
                     textual[lnum] = nil
                 end
             end
         end
+        mark_deletions(bufnr, result, last, marked, lines)
         -- Whatever git flagged that difft did not: formatting only. Keeping
         -- these visible (dimly) is what makes a missed real change noticeable.
         for lnum in pairs(textual) do
@@ -157,7 +260,11 @@ local function run(bufnr)
     if not old then
         return
     end
-    local new = temp_copy(vim.api.nvim_buf_get_name(bufnr), vim.api.nvim_buf_get_lines(bufnr, 0, -1, false))
+    local cur_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+    if #cur_lines == 1 and cur_lines[1] == "" then
+        cur_lines = {} -- an empty buffer is an empty file, not one blank line
+    end
+    local new = temp_copy(vim.api.nvim_buf_get_name(bufnr), cur_lines)
     -- Runs may overlap; only the latest one is allowed to paint.
     local buf = state.bufs[bufnr]
     buf.run_id = (buf.run_id or 0) + 1

@@ -56,19 +56,30 @@ function M.wait_run(bufnr)
     end, 20), "difft run did not finish")
 end
 
---- Signs by line: { [lnum] = "Add" | "Change" | "Format" }, plus inline ranges.
+--- Signs by line: { [lnum] = "Add" | "Change" | "Delete" | "Format" }, inline
+--- ranges, and virtual (deleted) lines as { [lnum] = { above = bool, text = {...} } }.
 function M.marks(bufnr)
     local ns = vim.api.nvim_create_namespace("structdiff")
-    local signs, inline = {}, {}
+    local signs, inline, virt = {}, {}, {}
     for _, m in ipairs(vim.api.nvim_buf_get_extmarks(bufnr, ns, 0, -1, { details = true })) do
         local d = m[4]
         if d.sign_text then
             signs[m[2] + 1] = d.sign_hl_group:gsub("^GitSigns", ""):gsub("^StructDiff", "")
+        elseif d.virt_lines then
+            local text = {}
+            for _, line in ipairs(d.virt_lines) do
+                local parts = {}
+                for _, seg in ipairs(line) do
+                    parts[#parts + 1] = seg[1]
+                end
+                text[#text + 1] = table.concat(parts)
+            end
+            virt[m[2] + 1] = { above = d.virt_lines_above or false, text = text }
         elseif d.hl_group then
             inline[#inline + 1] = { m[2] + 1, m[3], d.end_col }
         end
     end
-    return signs, inline
+    return signs, inline, virt
 end
 
 return M
