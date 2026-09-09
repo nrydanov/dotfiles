@@ -267,6 +267,30 @@ local function changed_items(base, root)
     return items, files
 end
 
+-- difft as git's external diff engine: one process for the whole MR, and git
+-- handles renames and new files for us.
+local DIFFT_ENV = { GIT_EXTERNAL_DIFF = "difft", DFT_UNSTABLE = "yes" }
+
+--- Per-file difft status ("changed" | "unchanged" | "created" | "deleted")
+--- for everything between `base` and the working tree, delivered async.
+--- @param cb fun(status: table<string, string>)
+function M.structural_status(base, root, cb)
+    vim.system(
+        { "git", "--no-pager", "diff", base },
+        { cwd = root, text = true, env = vim.tbl_extend("force", DIFFT_ENV, { DFT_DISPLAY = "json" }) },
+        vim.schedule_wrap(function(res)
+            local status = {}
+            for _, line in ipairs(vim.split(res.stdout or "", "\n", { trimempty = true })) do
+                local ok, decoded = pcall(vim.json.decode, line)
+                if ok and type(decoded) == "table" and decoded.path then
+                    status[decoded.path] = decoded.status
+                end
+            end
+            cb(status)
+        end)
+    )
+end
+
 function M.files(target)
     local root = repo_root()
     target = target or resolve_target(root)
@@ -281,17 +305,33 @@ function M.files(target)
     end
     local status = reviewed_status(root, target, files)
 
-    Snacks.picker.pick({
+    -- In structural mode the list and the preview follow difft: files that
+    -- only changed formatting are kept, but dimmed, so nothing disappears.
+    local structural = require("config.structdiff").active()
+    local semantic = {}
+
+    local picker = Snacks.picker.pick({
         source = "mr_files",
-        title = "MR files vs " .. target,
+        title = "MR files vs " .. target .. (structural and " (structural)" or ""),
         items = items,
         format = function(item, picker)
             local symbol = status[item.file] or " "
             local hl = symbol == "✓" and "SnacksPickerGitStatusAdded" or "SnacksPickerGitStatusModified"
             local ret = { { symbol, hl }, { " " } }
+            if semantic[item.file] == "unchanged" then
+                return vim.list_extend(ret, { { " =", "StructDiffFormat" }, { " " }, { item.file, "StructDiffFormat" } })
+            end
             return vim.list_extend(ret, Snacks.picker.format.git_status(item, picker))
         end,
         preview = function(ctx)
+            if structural then
+                Snacks.picker.preview.cmd(
+                    { "git", "--no-pager", "diff", base, "--", ctx.item.file },
+                    ctx,
+                    { env = vim.tbl_extend("force", DIFFT_ENV, { DFT_DISPLAY = "inline", DFT_COLOR = "always" }) }
+                )
+                return
+            end
             Snacks.picker.preview.cmd(
                 { "git", "--no-pager", "diff", "--no-ext-diff", base, "--", ctx.item.file },
                 ctx,
@@ -328,6 +368,15 @@ function M.files(target)
             list = { keys = { ["<c-r>"] = "toggle_reviewed" } },
         },
     })
+
+    if structural then
+        M.structural_status(base, root, function(result)
+            semantic = result
+            if not picker.closed then
+                picker.list:update({ force = true })
+            end
+        end)
+    end
 end
 
 return M

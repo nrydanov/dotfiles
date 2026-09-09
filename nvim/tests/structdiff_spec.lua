@@ -233,4 +233,32 @@ function M.test_empty_file_both_sides()
     h.assert_eq(h.marks(bufnr), {})
 end
 
+function M.test_mr_files_structural_status_classifies_files()
+    local dir = h.repo({
+        ["fmt.lua"] = "local function f(a, b)\n    return a + b\nend\n",
+        ["real.lua"] = "local x = 1\n",
+        ["gone.lua"] = "local y = 2\n",
+    })
+    h.write(dir, "fmt.lua", "local function f(\n    a,\n    b\n)\n    return a + b\nend\n")
+    h.write(dir, "real.lua", "local x = 2\n")
+    h.write(dir, "fresh.lua", "local z = 3\n")
+    vim.fn.delete(vim.fs.joinpath(dir, "gone.lua"))
+    vim.system({ "git", "add", "-N", "fresh.lua" }, { cwd = dir }):wait()
+
+    local got
+    require("config.mr_review").structural_status("HEAD", dir, function(status)
+        got = status
+    end)
+    assert(vim.wait(3000, function()
+        return got ~= nil
+    end), "structural_status did not call back")
+
+    h.assert_eq(got, {
+        ["fmt.lua"] = "unchanged",
+        ["real.lua"] = "changed",
+        ["fresh.lua"] = "created",
+        ["gone.lua"] = "deleted",
+    })
+end
+
 return M
