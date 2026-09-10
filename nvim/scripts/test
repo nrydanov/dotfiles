@@ -3,4 +3,5 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 SPEC=tests.structdiff_spec nvim --headless -u NONE --cmd "set rtp^=$PWD" -c 'luafile tests/run.lua'
+SPEC=tests.mr_comment_spec nvim --headless -u NONE --cmd "set rtp^=$PWD" -c 'luafile tests/run.lua'
 SPEC=tests.integration_spec nvim --headless -u init.lua -c 'luafile tests/run.lua'

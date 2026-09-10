@@ -386,4 +386,11 @@ function M.files(target)
     end
 end
 
+-- Shared with config.mr_comment, which keeps its queue in the same state file.
+M.git = git
+M.repo_root = repo_root
+M.rel_path = rel_path
+M.load_state = load_state
+M.save_state = save_state
+
 return M

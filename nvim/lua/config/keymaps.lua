@@ -20,6 +20,10 @@ vim.keymap.set("n", "<leader>gv", function() require("config.mr_review").toggle_
     { desc = "MR toggle reviewed" })
 vim.keymap.set("n", "<leader>gV", function() require("config.mr_review").since_review() end,
     { desc = "MR diff since review" })
+vim.keymap.set({ "n", "v" }, "<leader>gc", function() require("config.mr_comment").add() end,
+    { desc = "MR comment on line/range" })
+vim.keymap.set("n", "<leader>gC", function() require("config.mr_comment").pick() end,
+    { desc = "MR pending comments" })
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open Diagnostic Float" })
 vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { noremap = true, silent = true })
 vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { noremap = true, silent = true })
