@@ -115,7 +115,8 @@ function M.test_deletion_shows_virtual_line_above_anchor()
     local signs, _, virt = h.marks(bufnr)
     h.assert_eq(virt, { [2] = { above = true, text = { "local b = 2" } } })
     h.assert_eq(signs, { [2] = "Delete" }, "anchor line gets the delete sign")
-    h.assert_eq(h.marks(bufnr) and sd.nav("next") or vim.api.nvim_win_get_cursor(0)[1], 2, "]g stops on the anchor")
+    sd.nav("next")
+    h.assert_eq(vim.api.nvim_win_get_cursor(0)[1], 2, "]g stops on the anchor")
 end
 
 function M.test_deletion_at_end_of_file_renders_below_last_line()
@@ -228,6 +229,20 @@ function M.test_nav_skips_format_lines_and_wraps()
     h.assert_eq(visited, { 2, 4, 2 }, "next skips dim lines and wraps")
     sd.nav("prev")
     h.assert_eq(vim.api.nvim_win_get_cursor(0)[1], 4, "prev wraps backwards")
+end
+
+function M.test_nav_groups_adjacent_lines_and_reports_index()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\nlocal d = 4\nlocal e = 5\n" })
+    h.write(dir, "a.lua", "local a = 9\nlocal b = 9\nlocal c = 3\nlocal d = 4\nlocal e = 9\n")
+    local bufnr = h.open(dir, "a.lua")
+    h.assert_eq(h.marks(bufnr), { "Change", "Change", [5] = "Change" })
+
+    vim.api.nvim_win_set_cursor(0, { 3, 0 })
+    h.assert_eq(sd.nav("next"), 2, "lines 1-2 are one hunk, line 5 is the second")
+    h.assert_eq(vim.api.nvim_win_get_cursor(0)[1], 5)
+    h.assert_eq(sd.nav("next"), 1, "wraps to the first hunk")
+    h.assert_eq(vim.api.nvim_win_get_cursor(0)[1], 1)
+    h.assert_eq(sd.nav("prev"), 2, "prev wraps to the last hunk")
 end
 
 function M.test_format_highlight_survives_colorscheme_switch()

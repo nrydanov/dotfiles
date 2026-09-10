@@ -232,6 +232,22 @@ local function mark_deletions(bufnr, result, last, marked, lines)
     end
 end
 
+--- Consecutive marked lines form one hunk, like gitsigns.
+--- @param lines integer[] sorted, unique
+--- @return { start: integer, stop: integer }[]
+local function group_hunks(lines)
+    local hunks = {}
+    for _, l in ipairs(lines) do
+        local h = hunks[#hunks]
+        if h and l == h.stop + 1 then
+            h.stop = l
+        else
+            hunks[#hunks + 1] = { start = l, stop = l }
+        end
+    end
+    return hunks
+end
+
 local function apply(bufnr, result)
     vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
     local lines, marked = {}, {}
@@ -270,6 +286,7 @@ local function apply(bufnr, result)
     -- difft emits chunks in its own order; navigation wants buffer order.
     table.sort(lines)
     state.bufs[bufnr].lines = lines
+    state.bufs[bufnr].hunks = group_hunks(lines)
     state.bufs[bufnr].generation = (state.bufs[bufnr].generation or 0) + 1
 end
 
@@ -384,34 +401,38 @@ function M.disable()
     state.base = nil
 end
 
---- Jump to the next/previous marked line, wrapping around like gitsigns.
+--- Jump to the start of the next/previous hunk, wrapping around like gitsigns,
+--- and report the position the same way ("Hunk N of M").
 --- @param dir "next" | "prev"
+--- @return integer? index of the hunk landed on
 function M.nav(dir)
     local buf = state.bufs[vim.api.nvim_get_current_buf()]
-    local lines = buf and buf.lines or {}
-    if #lines == 0 then
+    local hunks = buf and buf.hunks or {}
+    if #hunks == 0 then
         return vim.notify("structdiff: no changes", vim.log.levels.INFO)
     end
     local cur = vim.api.nvim_win_get_cursor(0)[1]
-    local target
+    local index
     if dir == "next" then
-        for _, l in ipairs(lines) do
-            if l > cur then
-                target = l
+        for i, h in ipairs(hunks) do
+            if h.start > cur then
+                index = i
                 break
             end
         end
-        target = target or lines[1]
+        index = index or 1
     else
-        for i = #lines, 1, -1 do
-            if lines[i] < cur then
-                target = lines[i]
+        for i = #hunks, 1, -1 do
+            if hunks[i].start < cur then
+                index = i
                 break
             end
         end
-        target = target or lines[#lines]
+        index = index or #hunks
     end
-    vim.api.nvim_win_set_cursor(0, { target, 0 })
+    vim.api.nvim_win_set_cursor(0, { hunks[index].start, 0 })
+    vim.api.nvim_echo({ { ("Hunk %d of %d"):format(index, #hunks), "None" } }, false, {})
+    return index
 end
 
 return M
