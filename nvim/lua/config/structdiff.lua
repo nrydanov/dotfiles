@@ -14,8 +14,9 @@ local group = vim.api.nvim_create_augroup("structdiff", { clear = true })
 local DEBOUNCE_MS = 300
 
 -- state.base: commit to diff against
--- state.bufs[bufnr] = { lines, base_file, base_text, base_lines, timer, run_id, generation }
-local state = { base = nil, bufs = {} }
+-- state.show_deleted: render deleted base lines as virtual lines
+-- state.bufs[bufnr] = { lines, base_file, base_text, base_lines, timer, run_id, generation, result }
+local state = { base = nil, show_deleted = false, bufs = {} }
 
 -- Lines git would flag but difft considers pure formatting. A default link
 -- survives `:colorscheme`, so no ColorScheme hook is needed.
@@ -178,8 +179,8 @@ local function deleted_segments(text, changes)
 end
 
 -- Deleted lines render as virtual lines above their anchor (or below the
--- last line); the anchor itself becomes a navigation stop with a "▁" sign
--- unless it already carries a bright mark.
+-- last line) when `state.show_deleted` is on; either way the anchor becomes
+-- a navigation stop with a "▁" sign unless it already carries a bright mark.
 local function mark_deletions(bufnr, result, last, marked, lines)
     local buf = state.bufs[bufnr]
     local anchors = deletion_anchors(result.aligned_lines, last)
@@ -214,11 +215,12 @@ local function mark_deletions(bufnr, result, last, marked, lines)
             virt[#virt + 1] = item[2]
         end
         local above = anchor <= last
-        local row = (above and anchor or last) - 1
-        vim.api.nvim_buf_set_extmark(bufnr, ns, row, 0, {
-            virt_lines = virt,
-            virt_lines_above = above,
-        })
+        if state.show_deleted then
+            vim.api.nvim_buf_set_extmark(bufnr, ns, (above and anchor or last) - 1, 0, {
+                virt_lines = virt,
+                virt_lines_above = above,
+            })
+        end
         local stop = above and anchor or last
         if not marked[stop] then
             marked[stop] = true
@@ -319,6 +321,7 @@ local function run(bufnr)
             end
             local cur = state.bufs[bufnr]
             if cur and cur.run_id == run_id and vim.api.nvim_buf_is_valid(bufnr) then
+                cur.result = decoded -- kept so display toggles can repaint without difft
                 apply(bufnr, decoded)
             end
         end)
@@ -368,6 +371,23 @@ end
 
 function M.active()
     return state.base ~= nil
+end
+
+--- Show/hide deleted base lines as virtual lines; signs and ]g stops stay.
+--- @param value boolean? explicit state, flips when nil
+function M.toggle_deleted(value)
+    if value == nil then
+        value = not state.show_deleted
+    end
+    state.show_deleted = value
+    for bufnr, buf in pairs(state.bufs) do
+        if buf.result and vim.api.nvim_buf_is_valid(bufnr) then
+            apply(bufnr, buf.result) -- repaint from the last difft run: instant
+        else
+            M.refresh(bufnr)
+        end
+    end
+    return value
 end
 
 function M.enable(base)

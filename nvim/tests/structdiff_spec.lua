@@ -107,22 +107,48 @@ function M.test_whitespace_only_change_is_format()
     h.assert_eq(h.marks(bufnr), { "Format", "Format", "Format" })
 end
 
-function M.test_deletion_shows_virtual_line_above_anchor()
+function M.test_deletion_hidden_by_default_but_signed()
     local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\n" })
     h.write(dir, "a.lua", "local a = 1\nlocal c = 3\n")
     local bufnr = h.open(dir, "a.lua")
 
     local signs, _, virt = h.marks(bufnr)
-    h.assert_eq(virt, { [2] = { above = true, text = { "local b = 2" } } })
+    h.assert_eq(virt, {}, "no virtual lines until toggled")
     h.assert_eq(signs, { [2] = "Delete" }, "anchor line gets the delete sign")
     sd.nav("next")
     h.assert_eq(vim.api.nvim_win_get_cursor(0)[1], 2, "]g stops on the anchor")
+end
+
+function M.test_deletion_shows_virtual_line_above_anchor()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\n" })
+    h.write(dir, "a.lua", "local a = 1\nlocal c = 3\n")
+    local bufnr = h.open(dir, "a.lua")
+    sd.toggle_deleted(true)
+
+    local signs, _, virt = h.marks(bufnr)
+    h.assert_eq(virt, { [2] = { above = true, text = { "local b = 2" } } })
+    h.assert_eq(signs, { [2] = "Delete" }, "toggle keeps the sign")
+end
+
+function M.test_toggle_deleted_repaints_without_rerunning_difft()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\n" })
+    h.write(dir, "a.lua", "local a = 1\nlocal c = 3\n")
+    local bufnr = h.open(dir, "a.lua")
+
+    sd.toggle_deleted(true)
+    -- No wait: the toggle must paint from the cached result, synchronously.
+    local _, _, virt = h.marks(bufnr)
+    h.assert_eq(virt[2].text, { "local b = 2" }, "virtual line appears at once")
+    sd.toggle_deleted(false)
+    _, _, virt = h.marks(bufnr)
+    h.assert_eq(virt, {}, "and disappears at once")
 end
 
 function M.test_deletion_at_end_of_file_renders_below_last_line()
     local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\n" })
     h.write(dir, "a.lua", "local a = 1\n")
     local bufnr = h.open(dir, "a.lua")
+    sd.toggle_deleted(true)
 
     local signs, _, virt = h.marks(bufnr)
     h.assert_eq(virt, { [1] = { above = false, text = { "local b = 2", "local c = 3" } } })
@@ -133,6 +159,7 @@ function M.test_deletion_next_to_change_keeps_bright_sign()
     local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\nlocal c = 3\n" })
     h.write(dir, "a.lua", "local a = 1\nlocal c = 9\n")
     local bufnr = h.open(dir, "a.lua")
+    sd.toggle_deleted(true)
 
     local signs, _, virt = h.marks(bufnr)
     h.assert_eq(virt[2].text, { "local b = 2" })
@@ -143,6 +170,7 @@ function M.test_deleting_everything_shows_all_lines_below()
     local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\n" })
     h.write(dir, "a.lua", "")
     local bufnr = h.open(dir, "a.lua")
+    sd.toggle_deleted(true)
 
     local _, _, virt = h.marks(bufnr)
     h.assert_eq(virt[1].text, { "local a = 1", "local b = 2" })

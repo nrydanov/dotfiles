@@ -55,7 +55,10 @@ return {
             map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = "blame line" })
             map('n', '<leader>hd', gs.diffthis, { desc = "diff against index" })
             map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = "diff against last commit" })
-            map('n', '<leader>td', gs.toggle_deleted, { desc = "deleted lines" })
+            map('n', '<leader>td', function()
+                local sd = require("config.structdiff")
+                if sd.active() then sd.toggle_deleted() else gs.toggle_deleted() end
+            end, { desc = "deleted lines" })
         end
     }
 }

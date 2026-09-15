@@ -41,6 +41,7 @@ end
 function M.open(dir, name)
     local sd = require("config.structdiff")
     sd.disable()
+    sd.toggle_deleted(false) -- every test starts from the default
     vim.cmd("edit! " .. vim.fn.fnameescape(vim.fs.joinpath(dir, name)))
     local bufnr = vim.api.nvim_get_current_buf()
     sd.enable("HEAD")
