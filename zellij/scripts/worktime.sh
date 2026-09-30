@@ -14,6 +14,9 @@
 #   worktime.sh resume   start counting again
 #   worktime.sh reset    forget today's time and start from zero
 #   worktime.sh since 11:30   count today as unbroken work since that time
+#   worktime.sh attach   reset on the first call of the day (zsh/aliases.zsh
+#                        runs it on `zellij attach`: a session left open
+#                        overnight keeps zjstatus ticking)
 #
 # Day files double as a log: `sort -u <file> | wc -l` = minutes worked.
 
@@ -30,6 +33,12 @@ mkdir -p "$state_dir"
 case "$1" in
     reset)
         : >"$file"
+        ;;
+    attach)
+        if [ "$(cat "$state_dir/attached" 2>/dev/null)" != "$(date +%F)" ]; then
+            : >"$file"
+            date +%F >"$state_dir/attached"
+        fi
         ;;
     pause)
         : >"$paused"

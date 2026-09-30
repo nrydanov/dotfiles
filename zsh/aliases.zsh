@@ -21,3 +21,9 @@ alias worktime="~/.config/zellij/scripts/worktime.sh show; echo"
 alias worktime-pause="~/.config/zellij/scripts/worktime.sh pause; echo"
 alias worktime-resume="~/.config/zellij/scripts/worktime.sh resume; echo"
 alias worktime-reset="~/.config/zellij/scripts/worktime.sh reset; echo"
+zellij() {
+    case "$1" in
+        ""|a|attach) ~/.config/zellij/scripts/worktime.sh attach >/dev/null ;;
+    esac
+    command zellij "$@"
+}
