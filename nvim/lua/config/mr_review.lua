@@ -214,12 +214,16 @@ function M.toggle_reviewed(target)
         return
     end
 
-    local marks = load_state(root)[target] or {}
-    if marks[file] then
+    -- Only a current mark (✓) is taken back; a stale one (~) is refreshed to
+    -- the present commit, since re-reading the file is what one just did.
+    -- A mark already at HEAD has nothing to refresh to (the file is stale
+    -- only through uncommitted edits), so it is taken back as well.
+    local head = git({ "rev-parse", "HEAD" }, root)
+    local marked = (load_state(root)[target] or {})[file]
+    if marked == head or reviewed_status(root, target, { file })[file] == "✓" then
         set_reviewed(root, target, { file }, nil)
         vim.notify("MR review: " .. file .. " unmarked")
     else
-        local head = git({ "rev-parse", "HEAD" }, root)
         set_reviewed(root, target, { file }, head)
         vim.notify("MR review: " .. file .. " reviewed")
     end
