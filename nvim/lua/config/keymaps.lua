@@ -16,6 +16,9 @@ vim.keymap.set("n", "<leader>gd", function() require("config.mr_review").on_stru
 vim.keymap.set("n", "<leader>gM", function() require("config.mr_review").off() end, { desc = "MR review off" })
 vim.keymap.set("n", "<leader>gb", function() require("config.mr_review").set_base() end, { desc = "MR review base" })
 vim.keymap.set("n", "<leader>gf", function() require("config.mr_review").files() end, { desc = "MR changed files" })
+vim.keymap.set("n", "<leader>gk", function() require("config.mr_review").commits() end, { desc = "MR commits" })
+vim.keymap.set("n", "]C", function() require("config.mr_review").step_commit(1) end, { desc = "MR next commit" })
+vim.keymap.set("n", "[C", function() require("config.mr_review").step_commit(-1) end, { desc = "MR previous commit" })
 vim.keymap.set("n", "<leader>gv", function() require("config.mr_review").toggle_reviewed() end,
     { desc = "MR toggle reviewed" })
 vim.keymap.set("n", "<leader>gV", function() require("config.mr_review").since_review() end,

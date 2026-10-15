@@ -165,6 +165,133 @@ function M.on_structural(target)
     vim.notify("MR review (structural): diffing against " .. target)
 end
 
+-- Commit mode: HEAD is detached at one commit of the MR and diffed against
+-- its parent, so the buffers show exactly what that commit changed.
+-- { ref = ref to return to, commits = { {sha, short, subject} } oldest
+-- first, index = current commit, base = its parent }
+---@type table?
+local commit_mode = nil
+
+local function mr_commits(root)
+    local base = merge_base(resolve_target(root), root)
+    if not base then
+        return nil
+    end
+    local out = git({ "log", "--reverse", "--format=%H%x09%h%x09%s", base .. "..HEAD" }, root) or ""
+    local commits = {}
+    for _, line in ipairs(vim.split(out, "\n", { trimempty = true })) do
+        local sha, short, subject = line:match("^(%x+)\t(%x+)\t(.*)$")
+        commits[#commits + 1] = { sha = sha, short = short, subject = subject }
+    end
+    return commits
+end
+
+-- Checkout rewrites files under open buffers, so nothing may be unsaved
+-- or uncommitted when HEAD starts moving.
+local function can_enter(root)
+    if git({ "status", "--porcelain", "--untracked-files=no" }, root) ~= "" then
+        vim.notify("MR review: commit the changes in the working tree first", vim.log.levels.ERROR)
+        return false
+    end
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.bo[bufnr].modified and vim.bo[bufnr].buftype == "" then
+            vim.notify("MR review: save the modified buffers first", vim.log.levels.ERROR)
+            return false
+        end
+    end
+    return true
+end
+
+local function show_commit(root, index)
+    local mode = assert(commit_mode)
+    local commit = mode.commits[index]
+    local _, err = git({ "checkout", "--quiet", "--detach", commit.sha }, root)
+    if err then
+        vim.notify("MR review: " .. err, vim.log.levels.ERROR)
+        return
+    end
+    mode.index = index
+    mode.base = git({ "rev-parse", commit.sha .. "^" }, root)
+    vim.cmd.checktime()
+
+    require("gitsigns").change_base(mode.base, true)
+    local sd = require("config.structdiff")
+    if sd.active() then
+        sd.enable(mode.base)
+    end
+    vim.notify(("MR review: %d/%d %s %s"):format(index, #mode.commits, commit.short, commit.subject))
+end
+
+--- Picker over the MR commits; confirming one enters commit mode on it
+--- (or jumps there if commit mode is already on).
+function M.commits()
+    local root = repo_root()
+    local commits = commit_mode and commit_mode.commits or mr_commits(root)
+    if not commits then
+        return
+    end
+    if #commits == 0 then
+        vim.notify("MR review: no commits on top of " .. resolve_target(root), vim.log.levels.WARN)
+        return
+    end
+
+    local items = {}
+    for i, c in ipairs(commits) do
+        items[i] = { text = c.short .. " " .. c.subject, index = i, sha = c.sha, cwd = root }
+    end
+    Snacks.picker.pick({
+        source = "mr_commits",
+        title = "MR commits",
+        items = items,
+        format = function(item)
+            local c = commits[item.index]
+            local current = commit_mode and commit_mode.index == item.index
+            return {
+                { ("%d/%d"):format(item.index, #commits), current and "SnacksPickerGitBranchCurrent" or "SnacksPickerComment" },
+                { " " },
+                { c.short, "SnacksPickerGitCommit" },
+                { " " },
+                { c.subject, "SnacksPickerGitMsg" },
+            }
+        end,
+        preview = function(ctx)
+            Snacks.picker.preview.cmd({ "git", "--no-pager", "show", "--stat", ctx.item.sha }, ctx, { ft = "git" })
+        end,
+        confirm = function(picker, item)
+            picker:close()
+            if not item then
+                return
+            end
+            if not commit_mode then
+                if not can_enter(root) then
+                    return
+                end
+                local ref = git({ "symbolic-ref", "--short", "-q", "HEAD" }, root) or git({ "rev-parse", "HEAD" }, root)
+                commit_mode = { ref = ref, commits = commits }
+                -- Without a review mode on, fall back to the gitsigns one.
+                if not require("config.structdiff").active() then
+                    require("gitsigns").toggle_linehl(true)
+                end
+            end
+            show_commit(root, item.index)
+        end,
+    })
+end
+
+--- Step to the next (1) or previous (-1) commit in commit mode.
+function M.step_commit(delta)
+    if not commit_mode then
+        vim.notify("MR review: commit mode is off (<leader>gk)", vim.log.levels.WARN)
+        return
+    end
+    local index = commit_mode.index + delta
+    if index < 1 or index > #commit_mode.commits then
+        vim.notify("MR review: no more commits", vim.log.levels.INFO)
+        return
+    end
+    show_commit(repo_root(), index)
+end
+
 function M.set_base()
     local root = repo_root()
     Snacks.picker.git_branches({
@@ -185,6 +312,14 @@ function M.set_base()
 end
 
 function M.off()
+    if commit_mode then
+        local _, err = git({ "checkout", "--quiet", commit_mode.ref }, repo_root())
+        if err then
+            vim.notify("MR review: " .. err, vim.log.levels.ERROR)
+        end
+        commit_mode = nil
+        vim.cmd.checktime()
+    end
     require("config.structdiff").disable()
     local gs = require("gitsigns")
     gs.change_base(nil, true)
@@ -298,7 +433,9 @@ end
 function M.files(target)
     local root = repo_root()
     target = target or resolve_target(root)
-    local base = merge_base(target, root)
+    -- In commit mode the working tree sits at the commit, so diffing its
+    -- parent against it lists that commit's files only.
+    local base = commit_mode and commit_mode.base or merge_base(target, root)
     if not base then
         return
     end
