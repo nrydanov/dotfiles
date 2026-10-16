@@ -15,8 +15,8 @@ fn main() {
 }
 ]]
 
--- rustfmt layout of RUST_ONE_LINE. Trailing commas after the last field are
--- new tokens, so the struct literal on line 12 is a legitimate change.
+-- rustfmt layout of RUST_ONE_LINE. Since Difftastic 0.71 the trailing commas
+-- after the last field are not a semantic change either.
 local RUST_REFLOWED = [[
 struct Config {
     name: String,
@@ -50,7 +50,7 @@ function M.test_reflow_only_gives_dim_marks_and_no_bright_ones()
             bright[#bright + 1] = lnum
         end
     end
-    h.assert_eq(bright, { 12 }, "only the trailing comma line is semantic")
+    h.assert_eq(bright, {}, "a reflow has no semantic change")
     h.assert_eq(signs[1], "Format", "reflowed struct header is formatting only")
     h.assert_eq(signs[6], "Format", "reflowed fn signature is formatting only")
     h.assert_eq(signs[16], nil, "untouched line has no mark")
@@ -162,8 +162,23 @@ function M.test_deletion_next_to_change_keeps_bright_sign()
     sd.toggle_deleted(true)
 
     local signs, _, virt = h.marks(bufnr)
-    h.assert_eq(virt[2].text, { "local b = 2" })
+    h.assert_eq(virt[2].text, { "local b = 2", "local c = 3" }, "deleted line, then the old text of the changed one")
     h.assert_eq(signs[2], "Change", "change sign wins over the delete sign on the same line")
+end
+
+function M.test_changed_line_shows_its_old_text_above()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\nlocal b = 2\n" })
+    h.write(dir, "a.lua", "local a = 1\nlocal b = 9\n")
+    local bufnr = h.open(dir, "a.lua")
+
+    local signs, _, virt = h.marks(bufnr)
+    h.assert_eq(virt, {}, "nothing until toggled")
+    h.assert_eq(signs, { [2] = "Change" }, "no delete sign for a changed line")
+
+    sd.toggle_deleted(true)
+    signs, _, virt = h.marks(bufnr)
+    h.assert_eq(virt, { [2] = { above = true, text = { "local b = 2" } } })
+    h.assert_eq(signs, { [2] = "Change" })
 end
 
 function M.test_deleting_everything_shows_all_lines_below()
@@ -196,6 +211,30 @@ function M.test_string_content_change_is_semantic()
     h.write(dir, "a.lua", 'print("a  b")\n')
     local bufnr = h.open(dir, "a.lua")
     h.assert_eq(h.marks(bufnr)[1], "Change", "whitespace inside a string is a real change")
+end
+
+function M.test_reenable_keeps_split_pane()
+    local dir = h.repo({ ["a.lua"] = "local a = 1\n" })
+    h.write(dir, "a.lua", "local a = 2\n")
+    local bufnr = h.open(dir, "a.lua")
+    sd.toggle_split(true)
+    local ns = vim.api.nvim_create_namespace("structdiff")
+    local function pane_marks()
+        local n = 0
+        for _, m in ipairs(vim.api.nvim_buf_get_extmarks(bufnr, ns, 0, -1, { details = true })) do
+            if m[4].virt_text_win_col then
+                n = n + 1
+            end
+        end
+        return n
+    end
+    h.assert_eq(pane_marks(), 1, "pane drawn after toggle")
+
+    sd.enable("HEAD") -- mr_review re-targets the base this way
+    h.wait_run(bufnr)
+    h.assert_eq(pane_marks(), 1, "pane survives enable")
+    h.assert_eq(vim.wo.wrap, false, "wrap stays off")
+    sd.toggle_split(false)
 end
 
 function M.test_file_outside_repo_is_ignored()
