@@ -1,0 +1,21 @@
+return {
+    dir = vim.fn.expand("~/Documents/Dev/mrview.nvim"),
+    name = "mrview.nvim",
+    dependencies = { "lewis6991/gitsigns.nvim", "folke/snacks.nvim" },
+    cmd = "MRView",
+    opts = { signs = { comment = "" } },
+    keys = {
+        { "<leader>gm", function() require("mrview").on() end, desc = "MR review on" },
+        { "<leader>gd", function() require("mrview").structural() end, desc = "MR review on (structural)" },
+        { "<leader>gM", function() require("mrview").off() end, desc = "MR review off" },
+        { "<leader>gb", function() require("mrview").base() end, desc = "MR review base" },
+        { "<leader>gf", function() require("mrview").files() end, desc = "MR changed files" },
+        { "<leader>gk", function() require("mrview").commits() end, desc = "MR commits" },
+        { "]C", function() require("mrview").next_commit() end, desc = "MR next commit" },
+        { "[C", function() require("mrview").prev_commit() end, desc = "MR previous commit" },
+        { "<leader>gv", function() require("mrview").toggle_reviewed() end, desc = "MR toggle reviewed" },
+        { "<leader>gV", function() require("mrview").since_review() end, desc = "MR diff since review" },
+        { "<leader>gc", function() require("mrview").comment() end, mode = { "n", "v" }, desc = "MR comment on line/range" },
+        { "<leader>gC", function() require("mrview").comments() end, desc = "MR pending comments" },
+    },
+}

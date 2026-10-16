@@ -25,7 +25,7 @@ return {
             end
             --- Navigation (structural marks take over while MR review is on)
             local function nav(dir)
-                local sd = require("config.structdiff")
+                local sd = require("mrview.structdiff")
                 if sd.active() then sd.nav(dir) else gs.nav_hunk(dir) end
             end
             map('n', ']g', function()
@@ -56,9 +56,13 @@ return {
             map('n', '<leader>hd', gs.diffthis, { desc = "diff against index" })
             map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = "diff against last commit" })
             map('n', '<leader>td', function()
-                local sd = require("config.structdiff")
+                local sd = require("mrview.structdiff")
                 if sd.active() then sd.toggle_deleted() else gs.toggle_deleted() end
             end, { desc = "deleted lines" })
+            map('n', '<leader>ts', function()
+                local sd = require("mrview.structdiff")
+                if sd.active() then sd.toggle_split() end
+            end, { desc = "side-by-side base pane" })
         end
     }
 }
