@@ -1,9 +1,5 @@
 local h = require("tests.helpers")
 
--- Keep the queue out of the real state dir; mr_review resolves the root via Snacks.
-vim.env.XDG_STATE_HOME = vim.fn.tempname()
-_G.Snacks = { git = { get_root = function(cwd) return vim.fs.root(cwd, ".git") end } }
-
 local mc = require("config.mr_comment")
 local review = require("config.mr_review")
 

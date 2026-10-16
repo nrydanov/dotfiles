@@ -7,6 +7,10 @@
 
 local M = {}
 
+M.config = {
+    sign = "c", -- plain ASCII, renders without a patched font
+}
+
 local review = require("config.mr_review")
 
 local ns = vim.api.nvim_create_namespace("mr_comment")
@@ -22,15 +26,22 @@ vim.api.nvim_set_hl(0, "MRComment", { link = "DiagnosticInfo", default = true })
 --- @field body string
 --- @field head string HEAD sha when the comment was written
 
+-- root -> MRComment[], read from the state file once per session.
+local cache = {}
+
 --- @return MRComment[]
 function M.list(root)
-    return review.load_state(root)[KEY] or {}
+    if not cache[root] then
+        cache[root] = review.load_state(root)[KEY] or {}
+    end
+    return vim.deepcopy(cache[root])
 end
 
 local function store(root, comments)
     local state = review.load_state(root)
     state[KEY] = #comments > 0 and comments or nil
     review.save_state(root, state)
+    cache[root] = comments
 end
 
 local function refresh_signs(bufnr, root)
@@ -43,7 +54,7 @@ local function refresh_signs(bufnr, root)
     local last = vim.api.nvim_buf_line_count(bufnr)
     for _, c in ipairs(M.list(root)) do
         if c.path == rel and c.line <= last then
-            vim.api.nvim_buf_set_extmark(bufnr, ns, c.line - 1, 0, { sign_text = "", sign_hl_group = "MRComment" })
+            vim.api.nvim_buf_set_extmark(bufnr, ns, c.line - 1, 0, { sign_text = M.config.sign, sign_hl_group = "MRComment" })
         end
     end
 end
@@ -59,8 +70,13 @@ end
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = group,
     callback = function(ev)
-        if vim.bo[ev.buf].buftype == "" then
-            refresh_signs(ev.buf, review.repo_root())
+        if vim.bo[ev.buf].buftype ~= "" then
+            return
+        end
+        -- Cached after the first look, so most windows cost no file read.
+        local root = review.repo_root()
+        if #M.list(root) > 0 then
+            refresh_signs(ev.buf, root)
         end
     end,
 })
@@ -140,6 +156,9 @@ function M.add()
 end
 
 function M.pick()
+    if not review.have_snacks() then
+        return
+    end
     local root = review.repo_root()
     local function items()
         local out = {}
