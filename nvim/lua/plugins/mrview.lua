@@ -3,7 +3,7 @@ return {
     name = "mrview.nvim",
     dependencies = { "lewis6991/gitsigns.nvim", "folke/snacks.nvim" },
     cmd = "MRView",
-    opts = { signs = { comment = "" } },
+    opts = {},
     keys = {
         { "<leader>gm", function() require("mrview").on() end, desc = "MR review on" },
         { "<leader>gd", function() require("mrview").structural() end, desc = "MR review on (structural)" },
@@ -15,7 +15,5 @@ return {
         { "[C", function() require("mrview").prev_commit() end, desc = "MR previous commit" },
         { "<leader>gv", function() require("mrview").toggle_reviewed() end, desc = "MR toggle reviewed" },
         { "<leader>gV", function() require("mrview").since_review() end, desc = "MR diff since review" },
-        { "<leader>gc", function() require("mrview").comment() end, mode = { "n", "v" }, desc = "MR comment on line/range" },
-        { "<leader>gC", function() require("mrview").comments() end, desc = "MR pending comments" },
     },
 }
