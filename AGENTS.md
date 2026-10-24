@@ -15,3 +15,20 @@
    text use only the terms established in Russian-language literature, not calques from English
    (not «запертая мода» but «мода захвата»). If the literature has no term for a concept, describe it
    in plain words instead of coining a label.
+8. After every commit, re-read the message (title and body) for LLM cringe and remove it (amend before push,
+   after my confirmation). Signs: rhetorical "not X but Y"; colon before a short punchline; dramatic
+   inversion at the end of a paragraph; em-dash asides; closing summary/slogan sentence ("X is no longer
+   needed"); aphorisms ("A, B and C are one whole"); anthropomorphized code ("the function expressed its
+   state"); empty words in titles ("explicitly", "improved stability"); announced structure not matching
+   the content; guarantees listed in an advertising tone; over-explaining; invented terms or unverified
+   specifics (lint names, versions).
+9. Every commit title must answer the question "what was done?" — name the change itself
+   (e.g. "координатор запускается из файбера сервиса"), not a symptom,
+   a state, or a slogan ("смена мастера не ходит в background jobs").
+10. Unslop every text before it leaves the session under my name: tickets, MR descriptions, review
+    comments, messages to colleagues, docs. Re-read it for the signs from item 8 and remove them. Also
+    remove what the reader already knows about their own product or code, sections and requests I did
+    not ask for, and accounts of how you verified things.
+11. Create git worktrees inside the repository in `.git/worktree/<name>`
+    (`git worktree add .git/worktree/<name> ...`), not in sibling directories or the scratchpad.
+    Not `.git/worktrees`: git keeps its own worktree metadata there.
