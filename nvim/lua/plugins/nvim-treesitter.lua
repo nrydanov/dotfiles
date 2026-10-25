@@ -26,5 +26,14 @@ return {
         })
 
         treesitter.install(parsers)
+
+        -- The main branch only installs parsers; highlighting is started
+        -- per buffer. Files without a parser keep the legacy syntax.
+        vim.api.nvim_create_autocmd("FileType", {
+            group = vim.api.nvim_create_augroup("treesitter_start", { clear = true }),
+            callback = function(ev)
+                pcall(vim.treesitter.start, ev.buf)
+            end,
+        })
     end
 }
