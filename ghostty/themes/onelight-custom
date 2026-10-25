@@ -1,21 +1,26 @@
 palette = 0=#383A42
-palette = 1=#E45649
-palette = 2=#50A14F
-palette = 3=#C18401
-palette = 4=#0184BC
+palette = 1=#D32E1F
+palette = 2=#3D7B3D
+palette = 3=#936501
+palette = 4=#0176A8
 palette = 5=#A626A4
-palette = 6=#0997B3
+palette = 6=#077A91
 palette = 7=#FAFAFA
 palette = 8=#4F5666
-palette = 9=#DF6C75
-palette = 10=#98C379
-palette = 11=#E5C07B
-palette = 12=#61AFEF
-palette = 13=#C678DD
-palette = 14=#56B6C2
+palette = 9=#D32E1F
+palette = 10=#3D7B3D
+palette = 11=#936501
+palette = 12=#0176A8
+palette = 13=#A626A4
+palette = 14=#077A91
 palette = 15=#FFFFFF
-background = #FAFAFA
+background = #F3F3F3
 foreground = #383A42
 cursor-color = #0184BC
 selection-background = #BFCEFF
 selection-foreground = #383A42
+
+# Slot 16 mirrors the terminal background. Everything outside the terminal
+# (zellij theme, zjstatus) uses palette indices only, and 16 is the one
+# index for filling with "background" — keep it equal to background above.
+palette = 16=#F3F3F3

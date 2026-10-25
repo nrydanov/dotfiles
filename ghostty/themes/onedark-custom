@@ -19,3 +19,8 @@ foreground = #abb2bf
 cursor-color = #528bff
 cursor-text = #282c34
 selection-background = #3e4452
+
+# Slot 16 mirrors the terminal background. Everything outside the terminal
+# (zellij theme, zjstatus) uses palette indices only, and 16 is the one
+# index for filling with "background" — keep it equal to background above.
+palette = 16=#0d0f13
