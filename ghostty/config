@@ -16,10 +16,13 @@ font-size = 18
 # and right, leaving a dead strip under zellij's status bar)
 # -----------------
 window-padding-balance = true
-# ...and paint what's left with the nearest cell's background rather than the
-# configured one, so the leftover strip blends into zellij's black status bar
-# instead of showing up as a #0d0f13 band under it.
-window-padding-color = extend
+# Paint what's left with the terminal background. `extend` used the nearest
+# row's color instead, which stretched zellij's status bar background into the
+# padding and made the bar look one and a half rows tall.
+window-padding-color = background
+# Resize the window in whole cells so there's little padding to begin with.
+# macOS only.
+window-step-resize = true
 
 # -----------------
 # Cursor
@@ -44,6 +47,7 @@ bell-features = no-system,no-audio,no-attention,no-title,no-border
 # macOS integration
 # -----------------
 macos-option-as-alt = true
+macos-icon = chalkboard
 
 # -----------------
 # Clipboard (match kitty's write-clipboard write-primary read-clipboard read-primary)
