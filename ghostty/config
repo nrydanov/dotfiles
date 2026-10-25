@@ -1,6 +1,5 @@
 # ---------------------------------
 # Ghostty Configuration
-# Ported from kitty/kitty.conf — see git history for the kitty version
 # ---------------------------------
 
 # -----------------
@@ -30,8 +29,7 @@ window-step-resize = true
 cursor-style = bar
 
 # -----------------
-# Theme (auto light/dark, follows macOS system appearance natively —
-# replaces the kitty geninclude/color-mode.sh + $COLOR_MODE hack)
+# Theme (auto light/dark, follows macOS system appearance)
 # -----------------
 theme = light:onelight-custom,dark:onedark-custom
 
@@ -50,7 +48,7 @@ macos-option-as-alt = true
 macos-icon = chalkboard
 
 # -----------------
-# Clipboard (match kitty's write-clipboard write-primary read-clipboard read-primary)
+# Clipboard
 # -----------------
 clipboard-read = allow
 clipboard-write = allow
