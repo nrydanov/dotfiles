@@ -2,6 +2,11 @@
 alias vim=nvim
 ## Kubernetes
 alias k="kubectl"
+## SML/NJ (line editing, history, completions from ~/.sml_completions)
+## -b: word-break chars without ".", so that List.map completes as one word
+sml() {
+    command rlwrap -r -b $' \t\n\r(){}[],+-=&^%$#@";|\\' -H ~/.sml_history sml "$@"
+}
 
 alias venv="source .venv/bin/activate"
 
