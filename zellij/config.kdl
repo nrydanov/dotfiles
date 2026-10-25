@@ -75,7 +75,7 @@ themes {
     }
     light {
         fg "#383A42"
-        bg "#FAFAFA"
+        bg "#F3F3F3"
         black "#4F5666"
         red "#0184BC"
         green "#50A14F"
@@ -104,7 +104,7 @@ themes {
         }
         text_unselected {
             base 56 58 66
-            background 250 250 250
+            background 243 243 243
             emphasis_0 1 132 188
             emphasis_1 80 161 79
             emphasis_2 193 132 1
@@ -120,7 +120,7 @@ themes {
         }
         frame_unselected {
             base 79 86 102
-            background 250 250 250
+            background 243 243 243
             emphasis_0 1 132 188
             emphasis_1 80 161 79
             emphasis_2 193 132 1
@@ -128,7 +128,7 @@ themes {
         }
         frame_selected {
             base 1 132 188
-            background 250 250 250
+            background 243 243 243
             emphasis_0 80 161 79
             emphasis_1 193 132 1
             emphasis_2 166 38 164
@@ -142,11 +142,6 @@ themes {
 theme "dark"
 theme_dark "dark"
 theme_light "light"
-
-// zjstatus (top bar, zellij/layouts/default.kdl) has no theme_dark/theme_light
-// of its own, so it's fixed to the dark palette regardless of $COLOR_MODE.
-// The built-in status-bar (bottom bar) isn't affected — it follows
-// theme_dark/theme_light natively.
 
 keybinds clear-defaults=true {
     normal {
@@ -339,7 +334,7 @@ plugins {
 //    - true
 //    - false (Default)
 //
-simplified_ui false
+simplified_ui true
 
 // Choose the path to the default shell that zellij will use for opening new panes
 // Default: $SHELL
