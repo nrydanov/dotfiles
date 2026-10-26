@@ -1,6 +1,5 @@
 return {
-    dir = vim.fn.expand("~/Documents/Dev/Personal/incognito.nvim"),
-    name = "incognito.nvim",
+    "nrydanov/incognito.nvim",
     dependencies = { "lewis6991/gitsigns.nvim", "folke/snacks.nvim" },
     cmd = "Incognito",
     opts = {},
